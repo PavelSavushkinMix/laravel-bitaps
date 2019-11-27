@@ -4,7 +4,7 @@ namespace PostMix\LaravelBitaps\Contracts;
 
 use PostMix\LaravelBitaps\Models\Domain;
 
-interface IDomain
+interface IDomainAuthorization
 {
     /**
      * Create domain authorization code

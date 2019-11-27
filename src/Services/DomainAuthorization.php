@@ -3,10 +3,10 @@
 namespace PostMix\LaravelBitaps\Services;
 
 use Illuminate\Support\Facades\Cache;
-use PostMix\LaravelBitaps\Contracts\IDomain;
+use PostMix\LaravelBitaps\Contracts\IDomainAuthorization;
 use PostMix\LaravelBitaps\Models\Domain as DomainModel;
 
-class Domain extends BitapsBase implements IDomain
+class Domain extends BitapsBase implements IDomainAuthorization
 {
     /**
      * Key of the cache for domain access token
