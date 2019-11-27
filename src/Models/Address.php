@@ -53,4 +53,14 @@ class Address extends Model
     {
         $this->attributes['payment_code'] = encrypt($value);
     }
+
+    /**
+     * Domain of the current address
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function domain()
+    {
+        return $this->hasOne(Domain::class);
+    }
 }

@@ -88,15 +88,15 @@ class CallbackLog
     /**
      * @return array
      */
-    public function getStatus(): string
+    public function getStatus(): array
     {
         return $this->status;
     }
 
     /**
-     * @param string $value
+     * @param array $value
      */
-    public function setStatus(string $value)
+    public function setStatus(array $value)
     {
         $this->status = $value;
     }

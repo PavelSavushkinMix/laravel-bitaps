@@ -1,6 +1,6 @@
 <?php
 
-namespace PostMix\LaravelBitaps\APIs;
+namespace PostMix\LaravelBitaps\Services;
 
 use PostMix\LaravelBitaps\Traits\BitapsHelpers;
 

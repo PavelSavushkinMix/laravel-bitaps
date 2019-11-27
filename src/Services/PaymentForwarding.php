@@ -1,6 +1,6 @@
 <?php
 
-namespace PostMix\LaravelBitaps\APIs;
+namespace PostMix\LaravelBitaps\Services;
 
 use Illuminate\Support\Collection;
 use PostMix\LaravelBitaps\Contracts\IPaymentForwarding;

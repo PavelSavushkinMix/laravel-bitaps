@@ -15,17 +15,20 @@ class CreateAddressesTable extends Migration
     {
         Schema::create('addresses', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedBigInteger('domain_id');
             $table->text('payment_code');
             $table->string('callback_link');
             $table->string('forwarding_address');
-            $table->string('domain_hash');
             $table->unsignedSmallInteger('confirmations');
             $table->string('address');
             $table->string('legacy_address');
-            $table->string('domain');
             $table->string('invoice');
             $table->string('currency', 10);
             $table->timestamps();
+
+            $table->foreign('domain_id')
+                ->references('id')
+                ->on('domains');
         });
     }
 

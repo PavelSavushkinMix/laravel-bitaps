@@ -3,9 +3,11 @@
 namespace PostMix\LaravelBitaps;
 
 use Illuminate\Support\ServiceProvider;
-use PostMix\LaravelBitaps\APIs\CallbackLog;
-use PostMix\LaravelBitaps\APIs\PaymentForwarding;
+use PostMix\LaravelBitaps\Services\CallbackLog;
+use PostMix\LaravelBitaps\Services\Domain;
+use PostMix\LaravelBitaps\Services\PaymentForwarding;
 use PostMix\LaravelBitaps\Contracts\ICallbackLog;
+use PostMix\LaravelBitaps\Contracts\IDomain;
 use PostMix\LaravelBitaps\Contracts\IPaymentForwarding;
 
 class LaravelBitapsServiceProvider extends ServiceProvider
@@ -19,6 +21,7 @@ class LaravelBitapsServiceProvider extends ServiceProvider
     {
         $this->app->bind(IPaymentForwarding::class, PaymentForwarding::class);
         $this->app->bind(ICallbackLog::class, CallbackLog::class);
+        $this->app->bind(IDomain::class, Domain::class);
     }
 
     /**
