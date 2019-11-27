@@ -16,11 +16,11 @@ class Wallet extends Model
      */
     protected $fillable = [
         'id',
+        'currency_id',
         'wallet_id',
         'wallet_hash',
         'password',
         'callback_link',
-        'currency',
         'created_at',
         'updated_at',
     ];

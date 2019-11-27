@@ -40,6 +40,7 @@ class PaymentForwarding extends BitapsBase implements IPaymentForwarding
         $response = json_decode($responseBody->getContents());
 
         return Address::create([
+            'currency_id' => $this->currency->id,
             'payment_code' => (string)$response['payment_code'],
             'callback_link' => (string)$response['callback_link'],
             'forwarding_address' => (string)$response['forwarding_address'],
@@ -49,7 +50,6 @@ class PaymentForwarding extends BitapsBase implements IPaymentForwarding
             'legacy_address' => (string)$response['legacy_address'],
             'domain' => (string)$response['domain'],
             'invoice' => (string)$response['invoice'],
-            'currency' => (string)$response['currency'],
         ]);
     }
 

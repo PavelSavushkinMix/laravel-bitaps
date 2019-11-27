@@ -2,6 +2,7 @@
 
 namespace PostMix\LaravelBitaps\Services;
 
+use PostMix\LaravelBitaps\Models\Currency;
 use PostMix\LaravelBitaps\Traits\BitapsHelpers;
 
 class BitapsBase
@@ -19,6 +20,11 @@ class BitapsBase
     protected $client;
 
     /**
+     * @var Currency
+     */
+    protected $currency;
+
+    /**
      * PaymentForwadring constructor.
      *
      * @param string $cryptoCurrency
@@ -28,6 +34,7 @@ class BitapsBase
     public function __construct(string $cryptoCurrency = 'btc')
     {
         $this->checkCryptocurrency($cryptoCurrency);
+        $this->currency = Currency::code($cryptoCurrency)->first();
 
         $debugUrl = config('bitaps.debug') ? '/testnet' : '';
 

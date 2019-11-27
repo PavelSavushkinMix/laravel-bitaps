@@ -16,6 +16,7 @@ class Address extends Model
      */
     protected $fillable = [
         'id',
+        'currency_id',
         'domain_id',
         'wallet_id',
         'payment_code',
@@ -25,7 +26,6 @@ class Address extends Model
         'address',
         'legacy_address',
         'invoice',
-        'currency',
         'created_at',
         'updated_at',
     ];

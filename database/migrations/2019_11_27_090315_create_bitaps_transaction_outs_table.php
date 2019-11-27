@@ -23,7 +23,7 @@ class CreateTransactionOutsTable extends Migration
 
             $table->foreign('transaction_id')
                 ->references('id')
-                ->on('transactions');
+                ->on('bitaps_transactions');
         });
     }
 

@@ -15,12 +15,16 @@ class CreateWalletsTable extends Migration
     {
         Schema::create('bitaps_wallets', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedBigInteger('currency_id');
             $table->string('wallet_id');
             $table->string('wallet_hash');
             $table->string('callback_link')->nullable()->default(null);
-            $table->string('currency', 10)->index();
             $table->text('password');
             $table->timestamps();
+
+            $table->foreign('currency_id')
+                ->references('id')
+                ->on('bitaps_currencies');
         });
     }
 
