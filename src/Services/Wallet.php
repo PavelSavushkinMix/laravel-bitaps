@@ -17,18 +17,18 @@ class Wallet extends BitapsBase implements IWallet
      * Create a new wallet
      *
      * @param string $password
-     * @param string|null $callbackUrl
+     * @param string|null $callbackLink
      *
      * @return \PostMix\LaravelBitaps\Models\Wallet
      */
     public function create(
         string $password,
-        string $callbackUrl = null
+        string $callbackLink = null
     ): \PostMix\LaravelBitaps\Models\Wallet {
         $params = [
             'password' => $password,
         ];
-        $this->fillQuery($body, 'callback_url', $callbackUrl);
+        $this->fillQuery($params, 'callback_link', $callbackLink);
 
         $responseBody = $this->client->post('create/wallet', [
             'json' => $params,
@@ -41,7 +41,7 @@ class Wallet extends BitapsBase implements IWallet
             'wallet_id' => $response['wallet_id'],
             'wallet_hash' => $response['wallet_hash'],
             'password' => $password,
-            'callback_link' => $callbackUrl,
+            'callback_link' => $callbackLink,
         ]);
     }
 
@@ -59,7 +59,29 @@ class Wallet extends BitapsBase implements IWallet
         string $callbackLink = null,
         int $confirmations = 3
     ): Address {
-        // TODO: Implement createPaymentAddress() method.
+        $params = [
+            'wallet_id' => $wallet->wallet_id,
+        ];
+        $this->fillQuery($params, 'callback_link', $callbackLink);
+        $this->fillQuery($params, 'confirmations', $confirmations);
+
+        $responseBody = $this->client->post('create/wallet/payment/address', [
+            'json' => $params,
+        ])
+            ->getBody();
+        $response = json_decode($responseBody->getContents());
+
+        return Address::create([
+            'currency_id' => $this->currency->id,
+            'wallet_id' => $wallet->id,
+            'payment_code' => $response['payment_code'],
+            'callback_link' => $response['callback_link'],
+            'forwarding_address' => $response['forwarding_address'],
+            'confirmations' => $confirmations,
+            'address' => $response['address'],
+            'legacy_address' => $response['legacy_address'],
+            'invoice' => $response['invoice'],
+        ]);
     }
 
     /**

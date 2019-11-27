@@ -13,13 +13,13 @@ interface IWallet
      * Create a new wallet
      *
      * @param string $password
-     * @param string|null $callbackUrl
+     * @param string|null $callbackLink
      *
      * @return Wallet
      */
     public function create(
         string $password,
-        string $callbackUrl = null
+        string $callbackLink = null
     ): Wallet;
 
     /**

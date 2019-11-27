@@ -16,7 +16,7 @@ class CreateAddressesTable extends Migration
         Schema::create('bitaps_addresses', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('currency_id');
-            $table->unsignedBigInteger('domain_id');
+            $table->unsignedBigInteger('domain_id')->nullable()->default(null);
             $table->unsignedBigInteger('wallet_id')->nullable()->default(null);
             $table->text('payment_code');
             $table->string('callback_link');
