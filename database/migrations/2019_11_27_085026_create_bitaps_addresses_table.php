@@ -13,7 +13,7 @@ class CreateAddressesTable extends Migration
      */
     public function up()
     {
-        Schema::create('addresses', function (Blueprint $table) {
+        Schema::create('bitaps_addresses', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('domain_id');
             $table->unsignedBigInteger('wallet_id')->nullable()->default(null);
@@ -43,6 +43,6 @@ class CreateAddressesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('addresses');
+        Schema::dropIfExists('bitaps_addresses');
     }
 }

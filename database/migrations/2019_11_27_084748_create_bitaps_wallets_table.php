@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDomainsTable extends Migration
+class CreateWalletsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,13 @@ class CreateDomainsTable extends Migration
      */
     public function up()
     {
-        Schema::create('domains', function (Blueprint $table) {
+        Schema::create('bitaps_wallets', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('domain')->unique();
-            $table->string('domain_hash');
-            $table->text('authorization_code');
+            $table->string('wallet_id');
+            $table->string('wallet_hash');
+            $table->string('callback_link')->nullable()->default(null);
+            $table->string('currency', 10)->index();
+            $table->text('password');
             $table->timestamps();
         });
     }
@@ -29,6 +31,6 @@ class CreateDomainsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('domains');
+        Schema::dropIfExists('bitaps_wallets');
     }
 }

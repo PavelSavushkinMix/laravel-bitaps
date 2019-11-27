@@ -7,6 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class Domain extends Model
 {
     /**
+     * @var string
+     */
+    protected $table = 'bitaps_domains';
+
+    /**
      * @var array
      */
     protected $fillable = [

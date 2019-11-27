@@ -7,6 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class Wallet extends Model
 {
     /**
+     * @var string
+     */
+    protected $table = 'bitaps_wallets';
+
+    /**
      * @var array
      */
     protected $fillable = [

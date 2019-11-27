@@ -7,6 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class Address extends Model
 {
     /**
+     * @var string
+     */
+    protected $table = 'bitaps_addresses';
+
+    /**
      * @var array
      */
     protected $fillable = [
