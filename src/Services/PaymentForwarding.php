@@ -31,10 +31,7 @@ class PaymentForwarding extends BitapsBase implements IPaymentForwarding
             'forwarding_address' => $forwardingAddress,
             'confirmations' => $confirmations,
         ];
-
-        if (!is_null($callbackLink)) {
-            $params['callback_link'] = $callbackLink;
-        }
+        $this->fillQuery($params, 'callback_link', $callbackLink);
 
         $responseBody = $this->client->post('create/payment/address', [
             'json' => $params,

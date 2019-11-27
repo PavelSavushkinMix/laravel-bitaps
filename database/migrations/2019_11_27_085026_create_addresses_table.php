@@ -24,7 +24,7 @@ class CreateAddressesTable extends Migration
             $table->string('address');
             $table->string('legacy_address');
             $table->string('invoice');
-            $table->string('currency', 10);
+            $table->string('currency', 10)->index();
             $table->timestamps();
 
             $table->foreign('domain_id')

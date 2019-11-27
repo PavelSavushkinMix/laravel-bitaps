@@ -15,6 +15,7 @@ class Wallet extends Model
         'wallet_hash',
         'password',
         'callback_link',
+        'currency',
         'created_at',
         'updated_at',
     ];

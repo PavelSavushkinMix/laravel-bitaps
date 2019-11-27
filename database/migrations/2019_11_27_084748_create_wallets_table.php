@@ -17,7 +17,8 @@ class CreateWalletsTable extends Migration
             $table->bigIncrements('id');
             $table->string('wallet_id');
             $table->string('wallet_hash');
-            $table->string('callback_link');
+            $table->string('callback_link')->nullable()->default(null);
+            $table->string('currency', 10)->index();
             $table->text('password');
             $table->timestamps();
         });
