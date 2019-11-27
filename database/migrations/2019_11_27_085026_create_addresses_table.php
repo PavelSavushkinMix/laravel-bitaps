@@ -16,6 +16,7 @@ class CreateAddressesTable extends Migration
         Schema::create('addresses', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('domain_id');
+            $table->unsignedBigInteger('wallet_id')->nullable()->default(null);
             $table->text('payment_code');
             $table->string('callback_link');
             $table->string('forwarding_address');
@@ -29,6 +30,9 @@ class CreateAddressesTable extends Migration
             $table->foreign('domain_id')
                 ->references('id')
                 ->on('domains');
+            $table->foreign('wallet_id')
+                ->references('id')
+                ->on('wallets');
         });
     }
 
