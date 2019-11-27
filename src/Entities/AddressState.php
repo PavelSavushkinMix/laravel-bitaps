@@ -1,7 +1,7 @@
 <?php
 
 
-namespace PostMix\LaravelBitaps\Models;
+namespace PostMix\LaravelBitaps\Entities;
 
 
 class AddressState
