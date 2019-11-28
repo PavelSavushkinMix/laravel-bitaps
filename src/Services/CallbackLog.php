@@ -10,10 +10,12 @@ use PostMix\LaravelBitaps\Entities\RequestIpLog;
 use PostMix\LaravelBitaps\Models\Address;
 use PostMix\LaravelBitaps\Models\Transaction;
 use PostMix\LaravelBitaps\Traits\BitapsHelpers;
+use PostMix\LaravelBitaps\Traits\PaymentForwardingHelpers;
 
 class CallbackLog extends BitapsBase implements ICallbackLog
 {
-    use BitapsHelpers;
+    use BitapsHelpers,
+        PaymentForwardingHelpers;
 
     /**
      * Callback log for payment address
@@ -36,7 +38,7 @@ class CallbackLog extends BitapsBase implements ICallbackLog
         $logs = collect();
         $responseBody = $this->client->get('payment/address/callback/log/' . $address->address,
             [
-                'headers' => $this->getAccessHeaders($address),
+                'headers' => $this->getPaymentForwardingAccessHeaders($address),
                 'query' => $query,
             ])
             ->getBody();
@@ -93,7 +95,7 @@ class CallbackLog extends BitapsBase implements ICallbackLog
         $logs = collect();
         $responseBody = $this->client->get('payment/address/callback/log/' . $transaction->hash . '/' . $transaction->tx_out,
             [
-                'headers' => $this->getAccessHeaders($address),
+                'headers' => $this->getPaymentForwardingAccessHeaders($address),
                 'query' => $query,
             ])
             ->getBody();

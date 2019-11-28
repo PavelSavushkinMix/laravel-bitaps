@@ -13,9 +13,11 @@ class CreateAddressesTable extends Migration
      */
     public function up()
     {
-        Schema::create('addresses', function (Blueprint $table) {
+        Schema::create('bitaps_addresses', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('domain_id');
+            $table->unsignedBigInteger('currency_id');
+            $table->unsignedBigInteger('domain_id')->nullable()->default(null);
+            $table->unsignedBigInteger('wallet_id')->nullable()->default(null);
             $table->text('payment_code');
             $table->string('callback_link');
             $table->string('forwarding_address');
@@ -23,12 +25,17 @@ class CreateAddressesTable extends Migration
             $table->string('address');
             $table->string('legacy_address');
             $table->string('invoice');
-            $table->string('currency', 10);
             $table->timestamps();
 
+            $table->foreign('currency_id')
+                ->references('id')
+                ->on('bitaps_currencies');
             $table->foreign('domain_id')
                 ->references('id')
-                ->on('domains');
+                ->on('bitaps_domains');
+            $table->foreign('wallet_id')
+                ->references('id')
+                ->on('bitaps_wallets');
         });
     }
 
@@ -39,6 +46,6 @@ class CreateAddressesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('addresses');
+        Schema::dropIfExists('bitaps_addresses');
     }
 }

@@ -13,7 +13,7 @@ class CreateTransactionOutsTable extends Migration
      */
     public function up()
     {
-        Schema::create('transaction_outs', function (Blueprint $table) {
+        Schema::create('bitaps_transaction_outs', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('transaction_id');
             $table->unsignedInteger('amount');
@@ -23,7 +23,7 @@ class CreateTransactionOutsTable extends Migration
 
             $table->foreign('transaction_id')
                 ->references('id')
-                ->on('transactions');
+                ->on('bitaps_transactions');
         });
     }
 
@@ -34,6 +34,6 @@ class CreateTransactionOutsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('transaction_outs');
+        Schema::dropIfExists('bitaps_transaction_outs');
     }
 }

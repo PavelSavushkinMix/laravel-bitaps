@@ -8,10 +8,12 @@ use PostMix\LaravelBitaps\Entities\AddressState;
 use PostMix\LaravelBitaps\Models\Address;
 use PostMix\LaravelBitaps\Models\Transaction;
 use PostMix\LaravelBitaps\Traits\BitapsHelpers;
+use PostMix\LaravelBitaps\Traits\PaymentForwardingHelpers;
 
 class PaymentForwarding extends BitapsBase implements IPaymentForwarding
 {
-    use BitapsHelpers;
+    use BitapsHelpers,
+        PaymentForwardingHelpers;
 
     /**
      * Create a new forwarding address
@@ -31,10 +33,7 @@ class PaymentForwarding extends BitapsBase implements IPaymentForwarding
             'forwarding_address' => $forwardingAddress,
             'confirmations' => $confirmations,
         ];
-
-        if (!is_null($callbackLink)) {
-            $params['callback_link'] = $callbackLink;
-        }
+        $this->fillQuery($params, 'callback_link', $callbackLink);
 
         $responseBody = $this->client->post('create/payment/address', [
             'json' => $params,
@@ -43,6 +42,7 @@ class PaymentForwarding extends BitapsBase implements IPaymentForwarding
         $response = json_decode($responseBody->getContents());
 
         return Address::create([
+            'currency_id' => $this->currency->id,
             'payment_code' => (string)$response['payment_code'],
             'callback_link' => (string)$response['callback_link'],
             'forwarding_address' => (string)$response['forwarding_address'],
@@ -52,7 +52,6 @@ class PaymentForwarding extends BitapsBase implements IPaymentForwarding
             'legacy_address' => (string)$response['legacy_address'],
             'domain' => (string)$response['domain'],
             'invoice' => (string)$response['invoice'],
-            'currency' => (string)$response['currency'],
         ]);
     }
 
@@ -67,7 +66,7 @@ class PaymentForwarding extends BitapsBase implements IPaymentForwarding
     {
         $responseBody = $this->client->get('payment/address/state/' . $address->address,
             [
-                'headers' => $this->getAccessHeaders($address),
+                'headers' => $this->getPaymentForwardingAccessHeaders($address),
             ])
             ->getBody();
         $response = json_decode($responseBody->getContents());
@@ -120,7 +119,7 @@ class PaymentForwarding extends BitapsBase implements IPaymentForwarding
         $transactions = collect();
         $responseBody = $this->client->get('payment/address/transactions/' . $address->address,
             [
-                'headers' => $this->getAccessHeaders($address),
+                'headers' => $this->getPaymentForwardingAccessHeaders($address),
                 'query' => $query,
             ])
             ->getBody();

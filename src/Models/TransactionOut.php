@@ -7,6 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class TransactionOut extends Model
 {
     /**
+     * @var string
+     */
+    protected $table = 'bitaps_transaction_outs';
+
+    /**
      * @var array
      */
     protected $fillable = [

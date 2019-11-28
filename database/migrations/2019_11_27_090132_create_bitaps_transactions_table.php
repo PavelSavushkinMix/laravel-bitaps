@@ -13,7 +13,7 @@ class CreateTransactionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('transactions', function (Blueprint $table) {
+        Schema::create('bitaps_transactions', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedInteger('miner_fee');
             $table->string('tx_hash');
@@ -36,6 +36,6 @@ class CreateTransactionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('transactions');
+        Schema::dropIfExists('bitaps_transactions');
     }
 }

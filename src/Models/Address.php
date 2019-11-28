@@ -7,20 +7,25 @@ use Illuminate\Database\Eloquent\Model;
 class Address extends Model
 {
     /**
+     * @var string
+     */
+    protected $table = 'bitaps_addresses';
+
+    /**
      * @var array
      */
     protected $fillable = [
         'id',
+        'currency_id',
+        'domain_id',
+        'wallet_id',
         'payment_code',
         'callback_link',
         'forwarding_address',
-        'domain_hash',
         'confirmations',
         'address',
         'legacy_address',
-        'domain',
         'invoice',
-        'currency',
         'created_at',
         'updated_at',
     ];
@@ -62,5 +67,15 @@ class Address extends Model
     public function domain()
     {
         return $this->hasOne(Domain::class);
+    }
+
+    /**
+     * Wallet of the current address
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function wallet()
+    {
+        return $this->belongsTo(Wallet::class);
     }
 }
