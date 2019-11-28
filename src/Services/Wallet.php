@@ -7,6 +7,7 @@ use PostMix\LaravelBitaps\Contracts\IWallet;
 use PostMix\LaravelBitaps\Entities\WalletAddress;
 use PostMix\LaravelBitaps\Entities\WalletSentTransaction;
 use PostMix\LaravelBitaps\Entities\WalletState;
+use PostMix\LaravelBitaps\Entities\WalletStatistic;
 use PostMix\LaravelBitaps\Entities\WalletTransaction;
 use PostMix\LaravelBitaps\Models\Address;
 use PostMix\LaravelBitaps\Models\Wallet as WalletModel;
@@ -346,7 +347,7 @@ class Wallet extends BitapsBase implements IWallet
     /**
      * Get daily statistic of the specified wallet
      *
-     * @param \PostMix\LaravelBitaps\Models\Wallet $wallet
+     * @param WalletModel $wallet
      * @param int|null $from
      * @param int|null $to
      * @param int|null $limit
@@ -355,12 +356,51 @@ class Wallet extends BitapsBase implements IWallet
      * @return Collection
      */
     public function getDailyStatistic(
-        \PostMix\LaravelBitaps\Models\Wallet $wallet,
+        WalletModel $wallet,
         int $from = null,
         int $to = null,
         int $limit = null,
         int $page = null
     ): Collection {
-        // TODO: Implement getDailyStatistic() method.
+        $headers = $this->getWalletAccessHeaders($wallet, []);
+        $query = [];
+        $this->fillQuery($query, 'from', $from);
+        $this->fillQuery($query, 'to', $to);
+        $this->fillQuery($query, 'limit', $limit);
+        $this->fillQuery($query, 'page', $page);
+
+        $responseBody = $this->client->post('wallet/daily/statistic/' . $wallet->wallet_id,
+            [
+                'headers' => $headers,
+                'query' => $query,
+            ])
+            ->getBody();
+        $response = json_decode($responseBody->getContents());
+
+        $result = collect();
+        foreach ($response['day_list'] as $tx) {
+            $result->push(new WalletStatistic(
+                (int)$tx['balance_amount'],
+                (string)$tx['date'],
+                (int)$tx['datestamp'],
+                (int)$tx['address_count'],
+                (int)$tx['received_amount'],
+                (int)$tx['received_tx'],
+                (int)$tx['pending_received_amount'],
+                (int)$tx['pending_received_tx'],
+                (int)$tx['pending_received_amount_total'],
+                (int)$tx['pending_received_tx_total'],
+                (int)$tx['sent_amount'],
+                (int)$tx['sent_tx'],
+                (int)$tx['pending_sent_amount'],
+                (int)$tx['pending_sent_tx'],
+                (int)$tx['pending_sent_amount_total'],
+                (int)$tx['pending_sent_tx_total'],
+                (int)$tx['service_fee_paid_amount'],
+                (int)$tx['invalid_tx']
+            ));
+        }
+
+        return $result;
     }
 }
