@@ -8,10 +8,12 @@ use PostMix\LaravelBitaps\Entities\AddressState;
 use PostMix\LaravelBitaps\Models\Address;
 use PostMix\LaravelBitaps\Models\Transaction;
 use PostMix\LaravelBitaps\Traits\BitapsHelpers;
+use PostMix\LaravelBitaps\Traits\PaymentForwardingHelpers;
 
 class PaymentForwarding extends BitapsBase implements IPaymentForwarding
 {
-    use BitapsHelpers;
+    use BitapsHelpers,
+        PaymentForwardingHelpers;
 
     /**
      * Create a new forwarding address
@@ -64,7 +66,7 @@ class PaymentForwarding extends BitapsBase implements IPaymentForwarding
     {
         $responseBody = $this->client->get('payment/address/state/' . $address->address,
             [
-                'headers' => $this->getAccessHeaders($address),
+                'headers' => $this->getPaymentForwardingAccessHeaders($address),
             ])
             ->getBody();
         $response = json_decode($responseBody->getContents());
@@ -117,7 +119,7 @@ class PaymentForwarding extends BitapsBase implements IPaymentForwarding
         $transactions = collect();
         $responseBody = $this->client->get('payment/address/transactions/' . $address->address,
             [
-                'headers' => $this->getAccessHeaders($address),
+                'headers' => $this->getPaymentForwardingAccessHeaders($address),
                 'query' => $query,
             ])
             ->getBody();

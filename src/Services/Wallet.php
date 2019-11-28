@@ -4,14 +4,17 @@ namespace PostMix\LaravelBitaps\Services;
 
 use Illuminate\Support\Collection;
 use PostMix\LaravelBitaps\Contracts\IWallet;
+use PostMix\LaravelBitaps\Entities\WalletSentTransaction;
 use PostMix\LaravelBitaps\Entities\WalletState;
 use PostMix\LaravelBitaps\Models\Address;
 use PostMix\LaravelBitaps\Models\Wallet as WalletModel;
 use PostMix\LaravelBitaps\Traits\BitapsHelpers;
+use PostMix\LaravelBitaps\Traits\WalletHelpers;
 
 class Wallet extends BitapsBase implements IWallet
 {
-    use BitapsHelpers;
+    use BitapsHelpers,
+        WalletHelpers;
 
     /**
      * Create a new wallet
@@ -19,12 +22,12 @@ class Wallet extends BitapsBase implements IWallet
      * @param string $password
      * @param string|null $callbackLink
      *
-     * @return \PostMix\LaravelBitaps\Models\Wallet
+     * @return WalletModel
      */
     public function create(
         string $password,
         string $callbackLink = null
-    ): \PostMix\LaravelBitaps\Models\Wallet {
+    ): WalletModel {
         $params = [
             'password' => $password,
         ];
@@ -48,14 +51,14 @@ class Wallet extends BitapsBase implements IWallet
     /**
      * Create a new payment address of the wallet
      *
-     * @param \PostMix\LaravelBitaps\Models\Wallet $wallet
+     * @param WalletModel $wallet
      * @param string|null $callbackLink
      * @param int $confirmations
      *
      * @return Address
      */
     public function createPaymentAddress(
-        \PostMix\LaravelBitaps\Models\Wallet $wallet,
+        WalletModel $wallet,
         string $callbackLink = null,
         int $confirmations = 3
     ): Address {
@@ -88,18 +91,40 @@ class Wallet extends BitapsBase implements IWallet
      * Make a new payment to receivers
      * Format of the receivers list: [{"address": "...", "amount": 123}, ...]
      *
-     * @param \PostMix\LaravelBitaps\Models\Wallet $wallet
+     * @param WalletModel $wallet
      * @param array $receiversList
      * @param string|null $message
      *
      * @return Collection
      */
     public function sendPayment(
-        \PostMix\LaravelBitaps\Models\Wallet $wallet,
+        WalletModel $wallet,
         array $receiversList,
         string $message = null
     ): Collection {
-        // TODO: Implement sendPayment() method.
+        $params = [
+            'receivers_list' => $receiversList,
+        ];
+        $headers = $this->getWalletAccessHeaders($wallet, $params);
+
+        $responseBody = $this->client->post('wallet/send/payment/' . $wallet->wallet_hash,
+            [
+                'headers' => $headers,
+                'json' => $params,
+            ])
+            ->getBody();
+        $response = json_decode($responseBody->getContents());
+        $result = collect();
+        foreach ($response['tx_list'] as $tx) {
+            $result->push(new WalletSentTransaction(
+                (string)$tx['address'],
+                (string)$tx['tx_hash'],
+                (int)$tx['out'],
+                (int)$tx['amount']
+            ));
+        }
+
+        return $result;
     }
 
     /**

@@ -23,20 +23,6 @@ trait BitapsHelpers
     }
 
     /**
-     * Get access headers for requests
-     *
-     * @param Address $address
-     *
-     * @return array
-     */
-    protected function getAccessHeaders(Address $address): array
-    {
-        return [
-            'Payment-Code' => $address->payment_code,
-        ];
-    }
-
-    /**
      * Fill query array
      *
      * @param array $query
