@@ -57,20 +57,10 @@ interface IWallet
      * Get a state of the provided wallet
      *
      * @param Wallet $wallet
-     * @param int|null $from
-     * @param int|null $to
-     * @param int|null $limit
-     * @param int|null $page
      *
-     * @return array
+     * @return WalletState
      */
-    public function getState(
-        Wallet $wallet,
-        int $from = null,
-        int $to = null,
-        int $limit = null,
-        int $page = null
-    ): array;
+    public function getState(Wallet $wallet): WalletState;
 
     /**
      * Get list of the transactions by specified wallet
@@ -81,7 +71,7 @@ interface IWallet
      * @param int|null $limit
      * @param int|null $page
      *
-     * @return Collection
+     * @return array
      */
     public function getTransactions(
         Wallet $wallet,
@@ -89,7 +79,7 @@ interface IWallet
         int $to = null,
         int $limit = null,
         int $page = null
-    ): Collection;
+    ): array;
 
     /**
      * Get list of the addresses by specified wallet

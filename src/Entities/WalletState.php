@@ -53,7 +53,7 @@ class WalletState
      *
      * @var int
      */
-    private $serviceFee_paidAmount;
+    private $serviceFeePaidAmount;
 
     /**
      * Amount of unconfirmed transactions
@@ -127,7 +127,7 @@ class WalletState
      * @param int $createDateTimestamp
      * @param int $sentTx
      * @param int $pendingSentTx
-     * @param int $serviceFee_paidAmount
+     * @param int $serviceFeePaidAmount
      * @param int $pendingReceivedAmount
      * @param int $receivedTx
      * @param string $createDate
@@ -145,7 +145,7 @@ class WalletState
         int $createDateTimestamp,
         int $sentTx,
         int $pendingSentTx,
-        int $serviceFee_paidAmount,
+        int $serviceFeePaidAmount,
         int $pendingReceivedAmount,
         int $receivedTx,
         string $createDate,
@@ -162,7 +162,7 @@ class WalletState
         $this->setCreateDateTimestamp($createDateTimestamp);
         $this->setSentTx($sentTx);
         $this->setPendingSentTx($pendingSentTx);
-        $this->setServiceFee_paidAmount($serviceFee_paidAmount);
+        $this->setServiceFeePaidAmount($serviceFeePaidAmount);
         $this->setPendingReceivedAmount($pendingReceivedAmount);
         $this->setReceivedTx($receivedTx);
         $this->setCreateDate($createDate);
@@ -274,17 +274,17 @@ class WalletState
     /**
      * @return int
      */
-    public function getServiceFee_paidAmount(): int
+    public function getServiceFeePaidAmount(): int
     {
-        return $this->serviceFee_paidAmount;
+        return $this->serviceFeePaidAmount;
     }
 
     /**
      * @param int $value
      */
-    public function setServiceFee_paidAmount(int $value)
+    public function setServiceFeePaidAmount(int $value)
     {
-        $this->serviceFee_paidAmount = $value;
+        $this->serviceFeePaidAmount = $value;
     }
 
     /**

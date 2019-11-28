@@ -5,6 +5,7 @@ namespace PostMix\LaravelBitaps\Services;
 use Illuminate\Support\Collection;
 use PostMix\LaravelBitaps\Contracts\IWallet;
 use PostMix\LaravelBitaps\Entities\WalletSentTransaction;
+use PostMix\LaravelBitaps\Entities\WalletState;
 use PostMix\LaravelBitaps\Entities\WalletTransaction;
 use PostMix\LaravelBitaps\Models\Address;
 use PostMix\LaravelBitaps\Models\Wallet as WalletModel;
@@ -132,6 +133,46 @@ class Wallet extends BitapsBase implements IWallet
      * Get a state of the provided wallet
      *
      * @param WalletModel $wallet
+     *
+     * @return WalletState
+     */
+    public function getState(WalletModel $wallet): WalletState
+    {
+        $headers = $this->getWalletAccessHeaders($wallet, []);
+        $query = [];
+
+        $responseBody = $this->client->post('wallet/state/' . $wallet->wallet_id,
+            [
+                'headers' => $headers,
+                'query' => $query,
+            ])
+            ->getBody();
+        $response = json_decode($responseBody->getContents());
+
+        return new WalletState(
+            $wallet,
+            (int)$response['balance_amount'],
+            (int)$response['address_count'],
+            (int)$response['create_date_timestamp'],
+            (int)$response['sent_tx'],
+            (int)$response['pending_sent_tx'],
+            (int)$response['service_fee_paid_amount'],
+            (int)$response['pending_received_amount'],
+            (int)$response['received_tx'],
+            (string)$response['create_date'],
+            (int)$response['invalid_tx'],
+            (int)$response['sent_amount'],
+            (int)$response['pending_received_tx'],
+            (int)$response['last_used_nonce'],
+            (int)$response['received_amount'],
+            (int)$response['pending_sent_amount']
+        );
+    }
+
+    /**
+     * Get list of the transactions by specified wallet
+     *
+     * @param WalletModel $wallet
      * @param int|null $from
      * @param int|null $to
      * @param int|null $limit
@@ -139,7 +180,7 @@ class Wallet extends BitapsBase implements IWallet
      *
      * @return array
      */
-    public function getState(
+    public function getTransactions(
         WalletModel $wallet,
         int $from = null,
         int $to = null,
@@ -167,7 +208,7 @@ class Wallet extends BitapsBase implements IWallet
             $result[$type] = [];
 
             foreach ($response[$type]['tx_list'] as $tx) {
-                $result->push(new WalletTransaction(
+                $result[$type][] = new WalletTransaction(
                     (int)$tx['timeline_sent_count'],
                     (int)$tx['timestamp'],
                     (int)$tx['block_height'],
@@ -182,32 +223,11 @@ class Wallet extends BitapsBase implements IWallet
                     (int)$tx['timeline_invalid_count'],
                     (string)$tx['address'],
                     (string)$tx['time']
-                ));
+                );
             }
         }
 
         return $result;
-    }
-
-    /**
-     * Get list of the transactions by specified wallet
-     *
-     * @param \PostMix\LaravelBitaps\Models\Wallet $wallet
-     * @param int|null $from
-     * @param int|null $to
-     * @param int|null $limit
-     * @param int|null $page
-     *
-     * @return Collection
-     */
-    public function getTransactions(
-        \PostMix\LaravelBitaps\Models\Wallet $wallet,
-        int $from = null,
-        int $to = null,
-        int $limit = null,
-        int $page = null
-    ): Collection {
-        // TODO: Implement getTransactions() method.
     }
 
     /**
