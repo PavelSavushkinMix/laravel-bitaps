@@ -110,7 +110,7 @@ interface IWallet
      * @param int|null $limit
      * @param int|null $page
      *
-     * @return Collection
+     * @return array
      */
     public function getTransactionsByAddress(
         Wallet $wallet,
@@ -119,7 +119,7 @@ interface IWallet
         int $to = null,
         int $limit = null,
         int $page = null
-    ): Collection;
+    ): array;
 
     /**
      * Get daily statistic of the specified wallet

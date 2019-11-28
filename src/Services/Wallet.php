@@ -203,7 +203,7 @@ class Wallet extends BitapsBase implements IWallet
             ->getBody();
         $response = json_decode($responseBody->getContents());
 
-        $types = ['pending_transactions', 'transactions'];
+        $types = WalletTransaction::TRANSACTION_TYPES;
         $result = [];
         foreach ($types as $type) {
             $result[$type] = [];
@@ -283,24 +283,64 @@ class Wallet extends BitapsBase implements IWallet
     /**
      * Transactions of the wallet's address
      *
-     * @param \PostMix\LaravelBitaps\Models\Wallet $wallet
+     * @param WalletModel $wallet
      * @param Address $address
      * @param int|null $from
      * @param int|null $to
      * @param int|null $limit
      * @param int|null $page
      *
-     * @return Collection
+     * @return array
      */
     public function getTransactionsByAddress(
-        \PostMix\LaravelBitaps\Models\Wallet $wallet,
+        WalletModel $wallet,
         Address $address,
         int $from = null,
         int $to = null,
         int $limit = null,
         int $page = null
-    ): Collection {
-        // TODO: Implement getTransactionsByAddress() method.
+    ): array {
+        $headers = $this->getWalletAccessHeaders($wallet, []);
+        $query = [];
+        $this->fillQuery($query, 'from', $from);
+        $this->fillQuery($query, 'to', $to);
+        $this->fillQuery($query, 'limit', $limit);
+        $this->fillQuery($query, 'page', $page);
+
+        $responseBody = $this->client->post('wallet/address/transactions/' . $wallet->wallet_id . '/' . $address->address,
+            [
+                'headers' => $headers,
+                'query' => $query,
+            ])
+            ->getBody();
+        $response = json_decode($responseBody->getContents());
+
+        $types = WalletTransaction::TRANSACTION_TYPES;
+        $result = [];
+        foreach ($types as $type) {
+            $result[$type] = [];
+
+            foreach ($response[$type]['tx_list'] as $tx) {
+                $result[$type][] = new WalletTransaction(
+                    (int)$tx['timeline_sent_count'],
+                    (int)$tx['timestamp'],
+                    (int)$tx['block_height'],
+                    (int)$tx['create_timestamp'],
+                    (int)$tx['timeline_received_count'],
+                    (int)$tx['amount'],
+                    (string)$tx['hash'],
+                    (int)$tx['timeline_balance'],
+                    (int)$tx['out'],
+                    (int)$tx['fee'],
+                    (string)$tx['type'],
+                    (int)$tx['timeline_invalid_count'],
+                    (string)$tx['address'],
+                    (string)$tx['time']
+                );
+            }
+        }
+
+        return $result;
     }
 
     /**

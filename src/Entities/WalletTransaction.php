@@ -5,6 +5,14 @@ namespace PostMix\LaravelBitaps\Entities;
 class WalletTransaction
 {
     /**
+     * Types of the transactions
+     */
+    const TRANSACTION_TYPES = [
+        'transactions',
+        'pending_transactions',
+    ];
+
+    /**
      * Count of sent transactions before the current transaction
      *
      * @var int
