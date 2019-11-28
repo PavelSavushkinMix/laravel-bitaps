@@ -4,6 +4,7 @@ namespace PostMix\LaravelBitaps\Services;
 
 use Illuminate\Support\Collection;
 use PostMix\LaravelBitaps\Contracts\IWallet;
+use PostMix\LaravelBitaps\Entities\WalletAddress;
 use PostMix\LaravelBitaps\Entities\WalletSentTransaction;
 use PostMix\LaravelBitaps\Entities\WalletState;
 use PostMix\LaravelBitaps\Entities\WalletTransaction;
@@ -194,7 +195,7 @@ class Wallet extends BitapsBase implements IWallet
         $this->fillQuery($query, 'limit', $limit);
         $this->fillQuery($query, 'page', $page);
 
-        $responseBody = $this->client->post('wallet/state/' . $wallet->wallet_id,
+        $responseBody = $this->client->post('wallet/transactions/' . $wallet->wallet_id,
             [
                 'headers' => $headers,
                 'query' => $query,
@@ -233,7 +234,7 @@ class Wallet extends BitapsBase implements IWallet
     /**
      * Get list of the addresses by specified wallet
      *
-     * @param \PostMix\LaravelBitaps\Models\Wallet $wallet
+     * @param WalletModel $wallet
      * @param int|null $from
      * @param int|null $to
      * @param int|null $limit
@@ -242,13 +243,41 @@ class Wallet extends BitapsBase implements IWallet
      * @return Collection
      */
     public function getAddresses(
-        \PostMix\LaravelBitaps\Models\Wallet $wallet,
+        WalletModel $wallet,
         int $from = null,
         int $to = null,
         int $limit = null,
         int $page = null
     ): Collection {
-        // TODO: Implement getAddresses() method.
+        $headers = $this->getWalletAccessHeaders($wallet, []);
+        $query = [];
+        $this->fillQuery($query, 'from', $from);
+        $this->fillQuery($query, 'to', $to);
+        $this->fillQuery($query, 'limit', $limit);
+        $this->fillQuery($query, 'page', $page);
+
+        $responseBody = $this->client->post('wallet/addresses/' . $wallet->wallet_id,
+            [
+                'headers' => $headers,
+                'query' => $query,
+            ])
+            ->getBody();
+        $response = json_decode($responseBody->getContents());
+
+        $result = collect();
+        foreach ($response['address_list'] as $tx) {
+            $result->push(new WalletAddress(
+                (int)$tx['received_amount'],
+                (int)$tx['received_tx'],
+                (int)$tx['pending_received_amount'],
+                (int)$tx['pending_received_tx'],
+                (int)$tx['timestamp'],
+                (string)$tx['time'],
+                (string)$tx['address']
+            ));
+        }
+
+        return $result;
     }
 
     /**
