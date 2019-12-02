@@ -53,17 +53,17 @@ class Domain extends BitapsBase implements IDomainAuthorization
             ->getBody();
         $response = json_decode($responseBody->getContents());
 
-        $domain = DomainModel::where('domain_hash', $response['domain_hash'])
+        $domain = DomainModel::where('domain_hash', $response->domain_hash)
             ->first();
         if (is_null($domain)) {
             $domain = DomainModel::create([
-                'domain' => $response['domain'],
-                'domain_hash' => $response['domain_hash'],
-                'authorization_code' => $response['authorization_code'],
+                'domain' => $response->domain,
+                'domain_hash' => $response->domain_hash,
+                'authorization_code' => $response->authorization_code,
                 'callback_link' => $callbackLink,
             ]);
         } else {
-            $domain->authorization_code = $response['authorization_code'];
+            $domain->authorization_code = $response->authorization_code;
             $domain->save();
         }
 
@@ -93,7 +93,7 @@ class Domain extends BitapsBase implements IDomainAuthorization
                     ->getBody();
                 $response = json_decode($responseBody->getContents());
 
-                return $response['access_token'];
+                return $response->access_token;
             });
     }
 }
