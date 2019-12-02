@@ -2,6 +2,7 @@
 
 namespace PostMix\LaravelBitaps\Traits;
 
+use PostMix\LaravelBitaps\Contracts\IDomainAuthorization;
 use PostMix\LaravelBitaps\Models\Address;
 
 trait PaymentForwardingHelpers
@@ -13,10 +14,13 @@ trait PaymentForwardingHelpers
      *
      * @return array
      */
-    protected function getPaymentForwardingAccessHeaders(Address $address): array
-    {
+    protected function getPaymentForwardingAccessHeaders(Address $address
+    ): array {
+        $domainService = app()->make(IDomainAuthorization::class);
+
         return [
             'Payment-Code' => $address->payment_code,
+            'Access-Token' => $domainService->createDomainAccessToken(),
         ];
     }
 }

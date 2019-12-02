@@ -38,5 +38,6 @@ class LaravelBitapsServiceProvider extends ServiceProvider
             __DIR__ . '../config/bitaps.php' => config_path('bitaps.php'),
         ]);
         $this->loadMigrationsFrom(__DIR__ . '../database/migrations');
+        $this->loadRoutesFrom(__DIR__ . '/routes.php');
     }
 }
