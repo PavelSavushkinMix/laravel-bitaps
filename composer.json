@@ -14,17 +14,17 @@
         "php": "^7.1",
         "guzzlehttp/guzzle": "^6.4"
     },
+    "autoload": {
+        "psr-4": {
+            "PostMix\\LaravelBitaps\\": "src",
+            "PostMix\\Controllers\\": "src/Controllers"
+        }
+    },
     "extra": {
         "laravel": {
             "providers": [
-                "postmix\\laravel-bitaps\\LaravelBitapsServiceProvider"
+                "PostMix\\LaravelBitaps\\LaravelBitapsServiceProvider"
             ]
-        }
-    },
-    "autoload": {
-        "psr-4": {
-            "PostMix\\LaravelBitaps\\": "src/",
-            "PostMix\\Controllers\\": "src/Controllers"
         }
     }
 }
