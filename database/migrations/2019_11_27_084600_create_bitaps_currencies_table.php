@@ -17,7 +17,7 @@ class CreateBitapsCurrenciesTable extends Migration
         Schema::create('bitaps_currencies', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('code', 6)->unique();
-            $table->unsignedDecimal('service_fee', 8, 10);
+            $table->unsignedDecimal('service_fee', 8, 8);
             $table->string('name');
             $table->timestamps();
         });
