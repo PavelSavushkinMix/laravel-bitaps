@@ -45,7 +45,7 @@ class Wallet extends BitapsBase implements IWallet
         return WalletModel::create([
             'currency_id' => $this->currency->id,
             'wallet_id' => $response->wallet_id,
-            'wallet_hash' => $response->wallet_hash,
+            'wallet_hash' => $response->wallet_id_hash,
             'password' => $password,
             'callback_link' => $callbackLink,
         ]);
