@@ -2,7 +2,6 @@
 
 namespace PostMix\LaravelBitaps\Services;
 
-use Illuminate\Support\Facades\Cache;
 use PostMix\LaravelBitaps\Contracts\IDomainAuthorization;
 use PostMix\LaravelBitaps\Models\Domain as DomainModel;
 
@@ -41,10 +40,10 @@ class Domain extends BitapsBase implements IDomainAuthorization
      *
      * @param string $callbackLink
      *
-     * @return \PostMix\LaravelBitaps\Models\Domain
+     * @return DomainModel
      */
-    public function createDomainAuthorizationCode(string $callbackLink
-    ): \PostMix\LaravelBitaps\Models\Domain {
+    protected function createDomainAuthorizationCode(string $callbackLink
+    ): DomainModel {
         $responseBody = $this->client->post('create/domain/authorization/code',
             [
                 'json' => [
@@ -54,11 +53,21 @@ class Domain extends BitapsBase implements IDomainAuthorization
             ->getBody();
         $response = json_decode($responseBody->getContents());
 
-        return DomainModel::create([
-            'domain' => $response['domain'],
-            'domain_hash' => $response['domain_hash'],
-            'authorization_code' => $response['authorization_code'],
-        ]);
+        $domain = DomainModel::where('domain_hash', $response['domain_hash'])
+            ->first();
+        if (is_null($domain)) {
+            $domain = DomainModel::create([
+                'domain' => $response['domain'],
+                'domain_hash' => $response['domain_hash'],
+                'authorization_code' => $response['authorization_code'],
+                'callback_link' => $callbackLink,
+            ]);
+        } else {
+            $domain->authorization_code = $response['authorization_code'];
+            $domain->save();
+        }
+
+        return $domain;
     }
 
     /**
@@ -67,23 +76,18 @@ class Domain extends BitapsBase implements IDomainAuthorization
      * code as plain / text when you receive a GET request through callback
      * link.
      *
-     * @param DomainModel $domain
-     * @param string $callbackLink
-     *
      * @return string
-     *
-     * TODO it should be completed. Access token does not return here!
      */
-    public function createDomainAccessToken(
-        DomainModel $domain,
-        string $callbackLink
-    ): string {
-        return (string)Cache::remember(self::DOMAIN_ACCESS_TOKEN_CACHE_KEY . $domain->domain_hash,
-            $this->cacheAccessTokenMinutes, function () use ($callbackLink) {
+    public function createDomainAccessToken(): string
+    {
+        $domain = $this->createDomainAuthorizationCode(route('bitaps.payments-forwarding.callback'));
+
+        return \Cache::remember(self::DOMAIN_ACCESS_TOKEN_CACHE_KEY . $domain->domain_hash,
+            $this->cacheAccessTokenMinutes, function () use ($domain) {
                 $responseBody = $this->client->post('create/domain/access/token',
                     [
                         'json' => [
-                            'callback_link' => $callbackLink,
+                            'callback_link' => $domain->callback_link . '?hash=' . $domain->authorization_code,
                         ],
                     ])
                     ->getBody();

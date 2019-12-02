@@ -18,6 +18,7 @@ class CreateDomainsTable extends Migration
             $table->string('domain')->unique();
             $table->string('domain_hash');
             $table->text('authorization_code');
+            $table->string('callback_link');
             $table->timestamps();
         });
     }
