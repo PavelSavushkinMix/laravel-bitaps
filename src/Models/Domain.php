@@ -19,6 +19,7 @@ class Domain extends Model
         'domain',
         'domain_hash',
         'authorization_code',
+        'callback_link',
         'created_at',
         'updated_at',
     ];
