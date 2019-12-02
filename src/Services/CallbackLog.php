@@ -44,28 +44,28 @@ class CallbackLog extends BitapsBase implements ICallbackLog
             ->getBody();
         $response = json_decode($responseBody->getContents());
 
-        foreach ($response['callback_list'] as $cb) {
+        foreach ($response->callback_list as $cb) {
             $logs->push(new CallbackLogEntity(
-                is_array($cb['status']) ? $cb['status'] : [$cb['status']],
+                is_array($cb->status) ? $cb->status : [$cb->status],
                 new CallbackResponse(
-                    (int)$cb['response']['request_status'],
+                    (int)$cb->response->request_status,
                     new RequestIpLog(
-                        (string)$cb['response']['request_ip_log']['ip'],
-                        (int)$cb['response']['request_ip_log']['status'],
-                        (int)$cb['response']['request_ip_log']['time']
+                        (string)$cb->response->request_ip_log->ip,
+                        (int)$cb->response->request_ip_log->status,
+                        (int)$cb->response->request_ip_log->time
                     ),
-                    (string)$cb['response']['request_response'],
-                    (bool)$cb['response']['request_success'],
-                    (int)$cb['response']['request_id'],
-                    (string)$cb['response']['request_error']
+                    (string)$cb->response->request_response,
+                    (bool)$cb->response->request_success,
+                    (int)$cb->response->request_id,
+                    (string)$cb->response->request_error
                 ),
-                (string)$cb['time'],
-                (int)$cb['timestamp'],
-                (string)$cb['event'],
-                (int)$cb['confirmations'],
-                (string)$cb['outpount'],
-                (string)$cb['response_status'],
-                (int)$cb['amount']
+                (string)$cb->time,
+                (int)$cb->timestamp,
+                (string)$cb->event,
+                (int)$cb->confirmations,
+                (string)$cb->outpount,
+                (string)$cb->response_status,
+                (int)$cb->amount
             ));
         }
 
@@ -101,28 +101,28 @@ class CallbackLog extends BitapsBase implements ICallbackLog
             ->getBody();
         $response = json_decode($responseBody->getContents());
 
-        foreach ($response['callback_list'] as $cb) {
+        foreach ($response->callback_list as $cb) {
             $logs->push(new CallbackLogEntity(
-                is_array($cb['status']) ? $cb['status'] : [$cb['status']],
+                is_array($cb->status) ? $cb->status : [$cb->status],
                 new CallbackResponse(
-                    (int)$cb['response']['request_status'],
+                    (int)$cb->response->request_status,
                     new RequestIpLog(
-                        (string)$cb['response']['request_ip_log']['ip'],
-                        (int)$cb['response']['request_ip_log']['status'],
-                        (int)$cb['response']['request_ip_log']['time']
+                        (string)$cb->response->request_ip_log->ip,
+                        (int)$cb->response->request_ip_log->status,
+                        (int)$cb->response->request_ip_log->time
                     ),
-                    (string)$cb['response']['request_response'],
-                    (bool)$cb['response']['request_success'],
-                    (int)$cb['response']['request_id'],
-                    (string)$cb['response']['request_error']
+                    (string)$cb->response->request_response,
+                    (bool)$cb->response->request_success,
+                    (int)$cb->response->request_id,
+                    (string)$cb->response->request_error
                 ),
-                (string)$cb['time'],
-                (int)$cb['timestamp'],
-                (string)$cb['event'],
-                (int)$cb['confirmations'],
-                (string)$cb['outpount'],
-                (string)$cb['response_status'],
-                (int)$cb['amount']
+                (string)$cb->time,
+                (int)$cb->timestamp,
+                (string)$cb->event,
+                (int)$cb->confirmations,
+                (string)$cb->outpount,
+                (string)$cb->response_status,
+                (int)$cb->amount
             ));
         }
 
