@@ -16,8 +16,7 @@
     },
     "autoload": {
         "psr-4": {
-            "PostMix\\LaravelBitaps\\": "src",
-            "PostMix\\Controllers\\": "src/Controllers"
+            "PostMix\\LaravelBitaps\\": "src"
         }
     },
     "extra": {
