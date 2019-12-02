@@ -43,15 +43,15 @@ class PaymentForwarding extends BitapsBase implements IPaymentForwarding
 
         return Address::create([
             'currency_id' => $this->currency->id,
-            'payment_code' => (string)$response['payment_code'],
-            'callback_link' => (string)$response['callback_link'],
-            'forwarding_address' => (string)$response['forwarding_address'],
-            'domain_hash' => (string)$response['domain_hash'],
-            'confirmations' => (int)$response['confirmations'],
-            'address' => (string)$response['address'],
-            'legacy_address' => (string)$response['legacy_address'],
-            'domain' => (string)$response['domain'],
-            'invoice' => (string)$response['invoice'],
+            'payment_code' => (string)$response->payment_code,
+            'callback_link' => (string)$response->callback_link,
+            'forwarding_address' => (string)$response->forwarding_address,
+            'domain_hash' => (string)$response->domain_hash,
+            'confirmations' => (int)$response->confirmations,
+            'address' => (string)$response->address,
+            'legacy_address' => (string)$response->legacy_address,
+            'domain' => (string)$response->domain,
+            'invoice' => (string)$response->invoice,
         ]);
     }
 
@@ -72,23 +72,23 @@ class PaymentForwarding extends BitapsBase implements IPaymentForwarding
         $response = json_decode($responseBody->getContents());
 
         return new AddressState(
-            (string)$response['callback_link'],
-            (int)$response['pending_received'],
-            (int)$response['fee_paid'],
-            (int)$response['create_date'],
-            (int)$response['invalid_transaction_count'],
-            (int)$response['paid'],
-            (int)$response['received'],
-            (string)$response['forwarding_address'],
-            (int)$response['confirmations'],
-            (string)$response['address'],
-            (string)$response['legacy_address'],
-            (string)$response['type'],
-            (int)$response['transaction_count'],
-            (int)$response['pending_paid'],
-            (int)$response['pending_transaction_count'],
-            (string)$response['currency'],
-            (int)$response['create_date_timestamp']
+            (string)$response->callback_link,
+            (int)$response->pending_received,
+            (int)$response->fee_paid,
+            (int)$response->create_date,
+            (int)$response->invalid_transaction_count,
+            (int)$response->paid,
+            (int)$response->received,
+            (string)$response->forwarding_address,
+            (int)$response->confirmations,
+            (string)$response->address,
+            (string)$response->legacy_address,
+            (string)$response->type,
+            (int)$response->transaction_count,
+            (int)$response->pending_paid,
+            (int)$response->pending_transaction_count,
+            (string)$response->currency,
+            (int)$response->create_date_timestamp
         );
     }
 
@@ -125,24 +125,24 @@ class PaymentForwarding extends BitapsBase implements IPaymentForwarding
             ->getBody();
         $response = json_decode($responseBody->getContents());
 
-        foreach ($response['tx_list'] as $tx) {
+        foreach ($response->tx_list as $tx) {
             $trx = new Transaction([
-                'miner_fee' => $tx['payout']['miner_fee'],
-                'tx_hash' => $tx['payout']['tx_hash'],
-                'service_fee' => $tx['payout']['service_fee'],
-                'timestamp' => $tx['timestamp'],
-                'time' => $tx['time'],
-                'status' => $tx['status'],
-                'hash' => $tx['hash'],
-                'amount' => $tx['amount'],
-                'tx_out' => $tx['tx_out'],
-                'notification' => $tx['notification'],
+                'miner_fee' => $tx->payout->miner_fee,
+                'tx_hash' => $tx->payout->tx_hash,
+                'service_fee' => $tx->payout->service_fee,
+                'timestamp' => $tx->timestamp,
+                'time' => $tx->time,
+                'status' => $tx->status,
+                'hash' => $tx->hash,
+                'amount' => $tx->amount,
+                'tx_out' => $tx->tx_out,
+                'notification' => $tx->notification,
             ]);
-            foreach ($tx['outs'] as $out) {
+            foreach ($tx->outs as $out) {
                 $trx->outs()->create([
-                    'amount' => $out['amount'],
-                    'tx_out' => $out['tx_out'],
-                    'address' => $out['address'],
+                    'amount' => $out->amount,
+                    'tx_out' => $out->tx_out,
+                    'address' => $out->address,
                 ]);
             }
             $transactions->push($trx);

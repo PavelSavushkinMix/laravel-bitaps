@@ -44,8 +44,8 @@ class Wallet extends BitapsBase implements IWallet
 
         return WalletModel::create([
             'currency_id' => $this->currency->id,
-            'wallet_id' => $response['wallet_id'],
-            'wallet_hash' => $response['wallet_hash'],
+            'wallet_id' => $response->wallet_id,
+            'wallet_hash' => $response->wallet_hash,
             'password' => $password,
             'callback_link' => $callbackLink,
         ]);
@@ -80,13 +80,13 @@ class Wallet extends BitapsBase implements IWallet
         return Address::create([
             'currency_id' => $this->currency->id,
             'wallet_id' => $wallet->id,
-            'payment_code' => $response['payment_code'],
-            'callback_link' => $response['callback_link'],
-            'forwarding_address' => $response['forwarding_address'],
+            'payment_code' => $response->payment_code,
+            'callback_link' => $response->callback_link,
+            'forwarding_address' => $response->forwarding_address,
             'confirmations' => $confirmations,
-            'address' => $response['address'],
-            'legacy_address' => $response['legacy_address'],
-            'invoice' => $response['invoice'],
+            'address' => $response->address,
+            'legacy_address' => $response->legacy_address,
+            'invoice' => $response->invoice,
         ]);
     }
 
@@ -119,12 +119,12 @@ class Wallet extends BitapsBase implements IWallet
         $response = json_decode($responseBody->getContents());
 
         $result = collect();
-        foreach ($response['tx_list'] as $tx) {
+        foreach ($response->tx_list as $tx) {
             $result->push(new WalletSentTransaction(
-                (string)$tx['address'],
-                (string)$tx['tx_hash'],
-                (int)$tx['out'],
-                (int)$tx['amount']
+                (string)$tx->address,
+                (string)$tx->tx_hash,
+                (int)$tx->out,
+                (int)$tx->amount
             ));
         }
 
@@ -153,21 +153,21 @@ class Wallet extends BitapsBase implements IWallet
 
         return new WalletState(
             $wallet,
-            (int)$response['balance_amount'],
-            (int)$response['address_count'],
-            (int)$response['create_date_timestamp'],
-            (int)$response['sent_tx'],
-            (int)$response['pending_sent_tx'],
-            (int)$response['service_fee_paid_amount'],
-            (int)$response['pending_received_amount'],
-            (int)$response['received_tx'],
-            (string)$response['create_date'],
-            (int)$response['invalid_tx'],
-            (int)$response['sent_amount'],
-            (int)$response['pending_received_tx'],
-            (int)$response['last_used_nonce'],
-            (int)$response['received_amount'],
-            (int)$response['pending_sent_amount']
+            (int)$response->balance_amount,
+            (int)$response->address_count,
+            (int)$response->create_date_timestamp,
+            (int)$response->sent_tx,
+            (int)$response->pending_sent_tx,
+            (int)$response->service_fee_paid_amount,
+            (int)$response->pending_received_amount,
+            (int)$response->received_tx,
+            (string)$response->create_date,
+            (int)$response->invalid_tx,
+            (int)$response->sent_amount,
+            (int)$response->pending_received_tx,
+            (int)$response->last_used_nonce,
+            (int)$response->received_amount,
+            (int)$response->pending_sent_amount
         );
     }
 
@@ -209,22 +209,22 @@ class Wallet extends BitapsBase implements IWallet
         foreach ($types as $type) {
             $result[$type] = [];
 
-            foreach ($response[$type]['tx_list'] as $tx) {
+            foreach ($response->$type->tx_list as $tx) {
                 $result[$type][] = new WalletTransaction(
-                    (int)$tx['timeline_sent_count'],
-                    (int)$tx['timestamp'],
-                    (int)$tx['block_height'],
-                    (int)$tx['create_timestamp'],
-                    (int)$tx['timeline_received_count'],
-                    (int)$tx['amount'],
-                    (string)$tx['hash'],
-                    (int)$tx['timeline_balance'],
-                    (int)$tx['out'],
-                    (int)$tx['fee'],
-                    (string)$tx['type'],
-                    (int)$tx['timeline_invalid_count'],
-                    (string)$tx['address'],
-                    (string)$tx['time']
+                    (int)$tx->timeline_sent_count,
+                    (int)$tx->timestamp,
+                    (int)$tx->block_height,
+                    (int)$tx->create_timestamp,
+                    (int)$tx->timeline_received_count,
+                    (int)$tx->amount,
+                    (string)$tx->hash,
+                    (int)$tx->timeline_balance,
+                    (int)$tx->out,
+                    (int)$tx->fee,
+                    (string)$tx->type,
+                    (int)$tx->timeline_invalid_count,
+                    (string)$tx->address,
+                    (string)$tx->time
                 );
             }
         }
@@ -266,15 +266,15 @@ class Wallet extends BitapsBase implements IWallet
         $response = json_decode($responseBody->getContents());
 
         $result = collect();
-        foreach ($response['address_list'] as $tx) {
+        foreach ($response->address_list as $tx) {
             $result->push(new WalletAddress(
-                (int)$tx['received_amount'],
-                (int)$tx['received_tx'],
-                (int)$tx['pending_received_amount'],
-                (int)$tx['pending_received_tx'],
-                (int)$tx['timestamp'],
-                (string)$tx['time'],
-                (string)$tx['address']
+                (int)$tx->received_amount,
+                (int)$tx->received_tx,
+                (int)$tx->pending_received_amount,
+                (int)$tx->pending_received_tx,
+                (int)$tx->timestamp,
+                (string)$tx->time,
+                (string)$tx->address
             ));
         }
 
@@ -321,22 +321,22 @@ class Wallet extends BitapsBase implements IWallet
         foreach ($types as $type) {
             $result[$type] = [];
 
-            foreach ($response[$type]['tx_list'] as $tx) {
+            foreach ($response->$type->tx_list as $tx) {
                 $result[$type][] = new WalletTransaction(
-                    (int)$tx['timeline_sent_count'],
-                    (int)$tx['timestamp'],
-                    (int)$tx['block_height'],
-                    (int)$tx['create_timestamp'],
-                    (int)$tx['timeline_received_count'],
-                    (int)$tx['amount'],
-                    (string)$tx['hash'],
-                    (int)$tx['timeline_balance'],
-                    (int)$tx['out'],
-                    (int)$tx['fee'],
-                    (string)$tx['type'],
-                    (int)$tx['timeline_invalid_count'],
-                    (string)$tx['address'],
-                    (string)$tx['time']
+                    (int)$tx->timeline_sent_count,
+                    (int)$tx->timestamp,
+                    (int)$tx->block_height,
+                    (int)$tx->create_timestamp,
+                    (int)$tx->timeline_received_count,
+                    (int)$tx->amount,
+                    (string)$tx->hash,
+                    (int)$tx->timeline_balance,
+                    (int)$tx->out,
+                    (int)$tx->fee,
+                    (string)$tx->type,
+                    (int)$tx->timeline_invalid_count,
+                    (string)$tx->address,
+                    (string)$tx->time
                 );
             }
         }
@@ -378,26 +378,26 @@ class Wallet extends BitapsBase implements IWallet
         $response = json_decode($responseBody->getContents());
 
         $result = collect();
-        foreach ($response['day_list'] as $tx) {
+        foreach ($response->day_list as $tx) {
             $result->push(new WalletStatistic(
-                (int)$tx['balance_amount'],
-                (string)$tx['date'],
-                (int)$tx['datestamp'],
-                (int)$tx['address_count'],
-                (int)$tx['received_amount'],
-                (int)$tx['received_tx'],
-                (int)$tx['pending_received_amount'],
-                (int)$tx['pending_received_tx'],
-                (int)$tx['pending_received_amount_total'],
-                (int)$tx['pending_received_tx_total'],
-                (int)$tx['sent_amount'],
-                (int)$tx['sent_tx'],
-                (int)$tx['pending_sent_amount'],
-                (int)$tx['pending_sent_tx'],
-                (int)$tx['pending_sent_amount_total'],
-                (int)$tx['pending_sent_tx_total'],
-                (int)$tx['service_fee_paid_amount'],
-                (int)$tx['invalid_tx']
+                (int)$tx->balance_amount,
+                (string)$tx->date,
+                (int)$tx->datestamp,
+                (int)$tx->address_count,
+                (int)$tx->received_amount,
+                (int)$tx->received_tx,
+                (int)$tx->pending_received_amount,
+                (int)$tx->pending_received_tx,
+                (int)$tx->pending_received_amount_total,
+                (int)$tx->pending_received_tx_total,
+                (int)$tx->sent_amount,
+                (int)$tx->sent_tx,
+                (int)$tx->pending_sent_amount,
+                (int)$tx->pending_sent_tx,
+                (int)$tx->pending_sent_amount_total,
+                (int)$tx->pending_sent_tx_total,
+                (int)$tx->service_fee_paid_amount,
+                (int)$tx->invalid_tx
             ));
         }
 
