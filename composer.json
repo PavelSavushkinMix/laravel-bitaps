@@ -1,0 +1,29 @@
+{
+    "name": "postmix/laravel-bitaps",
+    "description": "A Bitaps API wrapper for Laravel Framework.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Pavel Savushkin",
+            "email": "pavel.savushkin.mix@gmail.com"
+        }
+    ],
+    "require": {
+        "ext-json": "*",
+        "php": "^7.1",
+        "guzzlehttp/guzzle": "^6.4"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "postmix\\laravel-bitaps\\LaravelBitapsServiceProvider"
+            ]
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "PostMix\\LaravelBitaps\\": "src/"
+        }
+    }
+}
