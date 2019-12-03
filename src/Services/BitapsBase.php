@@ -33,9 +33,6 @@ class BitapsBase
      */
     public function __construct(string $cryptoCurrency = 'btc')
     {
-        $this->checkCryptocurrency($cryptoCurrency);
-        $this->currency = Currency::code($cryptoCurrency)->first();
-
         $debugUrl = config('bitaps.debug') ? '/testnet' : '';
 
         $url = self::BASE_URL . $cryptoCurrency . $debugUrl . '/v1/';
@@ -44,5 +41,20 @@ class BitapsBase
             'base_uri' => $url,
             'timeout' => config('bitaps.timeout'),
         ]);
+    }
+
+    /**
+     * Get current currency
+     *
+     * @param string $cryptoCurrency
+     *
+     * @return Currency
+     * @throws \Exception
+     */
+    protected function getCurrency(string $cryptoCurrency = 'btc'): Currency
+    {
+        $this->checkCryptocurrency($cryptoCurrency);
+
+        return Currency::code($cryptoCurrency)->first();
     }
 }
