@@ -10,8 +10,24 @@ Route::group([
         'prefix' => 'payments-forwarding',
     ], function () {
         Route::get('callback', [
-            'as' => 'callback',
             'uses' => 'PaymentsForwardingController@getCallback',
+        ]);
+        Route::post('callback', [
+            'as' => 'callback',
+            'uses' => 'PaymentsForwardingController@postCallback',
+        ]);
+    });
+    Route::group([
+        'as' => 'wallet.',
+        'prefix' => 'wallet',
+    ], function () {
+        Route::post('callback', [
+            'as' => 'callback',
+            'uses' => 'WalletController@postCallbackWallet',
+        ]);
+        Route::post('callback-address', [
+            'as' => 'callback-address',
+            'uses' => 'WalletController@postCallbackAddress',
         ]);
     });
 });

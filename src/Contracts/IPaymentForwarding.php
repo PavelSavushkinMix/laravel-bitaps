@@ -12,14 +12,12 @@ interface IPaymentForwarding
      * Create a new forwarding address
      *
      * @param string $forwardingAddress
-     * @param string|null $callbackLink
      * @param int $confirmations
      *
      * @return Address
      */
     public function createAddress(
         string $forwardingAddress,
-        string $callbackLink = null,
         int $confirmations = 3
     ): Address;
 

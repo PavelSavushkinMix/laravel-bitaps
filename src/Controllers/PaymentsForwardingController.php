@@ -17,4 +17,20 @@ class PaymentsForwardingController extends Controller
 
         return response()->noContent(200);
     }
+
+    /**
+     * Process callback requests
+     *
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\Response
+     * TODO it should process requests
+     */
+    public function postCallback(Request $request)
+    {
+        $invoice = $request->get('invoice');
+
+        echo $invoice;
+        return response()->noContent();
+    }
 }
