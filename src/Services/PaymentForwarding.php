@@ -27,12 +27,12 @@ class PaymentForwarding extends BitapsBase implements IPaymentForwarding
         string $forwardingAddress,
         int $confirmations = 3
     ): Address {
+        $callbackLink = route('bitaps.payments-forwarding.callback');
         $params = [
             'forwarding_address' => $forwardingAddress,
             'confirmations' => $confirmations,
         ];
-        $this->fillQuery($params, 'callback_link',
-            route('bitaps.payments-forwarding.callback'));
+        $this->fillQuery($params, 'callback_link', $callbackLink);
 
         $responseBody = $this->client->post('create/payment/address', [
             'json' => $params,
@@ -46,9 +46,9 @@ class PaymentForwarding extends BitapsBase implements IPaymentForwarding
             'callback_link' => (string)$response->callback_link,
             'forwarding_address' => (string)$response->forwarding_address,
             'domain_hash' => (string)$response->domain_hash,
-            'confirmations' => (int)$response->confirmations,
+            'confirmations' => $confirmations,
             'address' => (string)$response->address,
-            'legacy_address' => (string)$response->legacy_address,
+            'legacy_address' => $response->legacy_address ?? null,
             'domain' => (string)$response->domain,
             'invoice' => (string)$response->invoice,
         ]);
