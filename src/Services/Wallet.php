@@ -41,7 +41,7 @@ class Wallet extends BitapsBase implements IWallet
         $response = json_decode($responseBody->getContents());
 
         return WalletModel::create([
-            'currency_id' => $this->currency->id,
+            'currency_id' => $this->getCurrency()->id,
             'wallet_id' => $response->wallet_id,
             'wallet_hash' => $response->wallet_id_hash,
             'password' => $password,
@@ -76,14 +76,13 @@ class Wallet extends BitapsBase implements IWallet
         $response = json_decode($responseBody->getContents());
 
         return Address::create([
-            'currency_id' => $this->currency->id,
+            'currency_id' => $this->getCurrency()->id,
             'wallet_id' => $wallet->id,
             'payment_code' => $response->payment_code,
-            'callback_link' => $response->callback_link,
-            'forwarding_address' => $response->forwarding_address,
+            'callback_link' => $callbackLink,
             'confirmations' => $confirmations,
             'address' => $response->address,
-            'legacy_address' => $response->legacy_address,
+            'legacy_address' => $response->legacy_address ?? null,
             'invoice' => $response->invoice,
         ]);
     }
