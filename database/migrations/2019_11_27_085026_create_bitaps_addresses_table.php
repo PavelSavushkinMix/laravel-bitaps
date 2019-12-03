@@ -20,10 +20,10 @@ class CreateBitapsAddressesTable extends Migration
             $table->unsignedBigInteger('wallet_id')->nullable()->default(null);
             $table->text('payment_code');
             $table->string('callback_link');
-            $table->string('forwarding_address');
+            $table->string('forwarding_address')->nullable()->default(null);
             $table->unsignedSmallInteger('confirmations');
             $table->string('address');
-            $table->string('legacy_address');
+            $table->string('legacy_address')->nullable()->default(null);
             $table->string('invoice');
             $table->timestamps();
 

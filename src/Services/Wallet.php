@@ -80,10 +80,9 @@ class Wallet extends BitapsBase implements IWallet
             'wallet_id' => $wallet->id,
             'payment_code' => $response->payment_code,
             'callback_link' => $response->callback_link,
-            'forwarding_address' => $response->forwarding_address,
             'confirmations' => $confirmations,
             'address' => $response->address,
-            'legacy_address' => $response->legacy_address,
+            'legacy_address' => $response->legacy_address ?? null,
             'invoice' => $response->invoice,
         ]);
     }
