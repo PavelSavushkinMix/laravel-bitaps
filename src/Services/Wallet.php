@@ -23,14 +23,12 @@ class Wallet extends BitapsBase implements IWallet
      * Create a new wallet
      *
      * @param string $password
-     * @param string|null $callbackLink
      *
      * @return WalletModel
      */
-    public function create(
-        string $password,
-        string $callbackLink = null
-    ): WalletModel {
+    public function create(string $password): WalletModel
+    {
+        $callbackLink = route('bitaps.wallet.callback');
         $params = [
             'password' => $password,
         ];
@@ -55,16 +53,16 @@ class Wallet extends BitapsBase implements IWallet
      * Create a new payment address of the wallet
      *
      * @param WalletModel $wallet
-     * @param string|null $callbackLink
      * @param int $confirmations
      *
      * @return Address
      */
     public function createPaymentAddress(
         WalletModel $wallet,
-        string $callbackLink = null,
         int $confirmations = 3
     ): Address {
+        $callbackLink = route('bitaps.wallet.callback-address');
+
         $params = [
             'wallet_id' => $wallet->wallet_id,
         ];

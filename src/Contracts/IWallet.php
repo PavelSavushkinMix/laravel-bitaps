@@ -13,27 +13,21 @@ interface IWallet
      * Create a new wallet
      *
      * @param string $password
-     * @param string|null $callbackLink
      *
      * @return Wallet
      */
-    public function create(
-        string $password,
-        string $callbackLink = null
-    ): Wallet;
+    public function create(string $password): Wallet;
 
     /**
      * Create a new payment address of the wallet
      *
      * @param Wallet $wallet
-     * @param string|null $callbackLink
      * @param int $confirmations
      *
      * @return Address
      */
     public function createPaymentAddress(
         Wallet $wallet,
-        string $callbackLink = null,
         int $confirmations = 3
     ): Address;
 
