@@ -1,6 +1,6 @@
 <?php
 
-namespace PostMix\Controllers;
+namespace PostMix\LaravelBitaps\Controllers;
 
 use Illuminate\Http\Request;
 

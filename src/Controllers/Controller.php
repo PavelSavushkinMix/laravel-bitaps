@@ -1,6 +1,6 @@
 <?php
 
-namespace PostMix\Controllers;
+namespace PostMix\LaravelBitaps\Controllers;
 
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
