@@ -46,4 +46,14 @@ class Wallet extends Model
     {
         $this->attributes['password'] = encrypt($value);
     }
+
+    /**
+     * Addresses of the current wallet
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function addresses()
+    {
+        return $this->hasMany(Address::class);
+    }
 }
