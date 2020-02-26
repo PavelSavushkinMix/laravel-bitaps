@@ -24,7 +24,6 @@ class Address extends Model
         'forwarding_address',
         'confirmations',
         'address',
-        'legacy_address',
         'invoice',
         'created_at',
         'updated_at',
