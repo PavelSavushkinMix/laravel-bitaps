@@ -27,7 +27,8 @@ class PaymentForwarding extends BitapsBase implements IPaymentForwarding
         string $forwardingAddress,
         int $confirmations = 3
     ): Address {
-        $callbackLink = route('bitaps.payments-forwarding.callback');
+        //If you are using a local environment, add BITAPS_CALLBACKLINK_USER to your configuration
+        $callbackLink = env('APP_ENV') === 'local' ? env('BITAPS_CALLBACKLINK_USER') : route('bitaps.wallet.callback');
         $params = [
             'forwarding_address' => $forwardingAddress,
             'confirmations' => $confirmations,
@@ -48,7 +49,6 @@ class PaymentForwarding extends BitapsBase implements IPaymentForwarding
             'domain_hash' => (string)$response->domain_hash,
             'confirmations' => $confirmations,
             'address' => (string)$response->address,
-            'legacy_address' => $response->legacy_address ?? null,
             'domain' => (string)$response->domain,
             'invoice' => (string)$response->invoice,
         ]);
@@ -70,8 +70,11 @@ class PaymentForwarding extends BitapsBase implements IPaymentForwarding
             ->getBody();
         $response = json_decode($responseBody->getContents());
 
+        //If you are using a local environment, add BITAPS_CALLBACKLINK_FORWARDING to your configuration
+        $callbackLink = env('APP_ENV') === 'local' ? env('BITAPS_CALLBACKLINK_FORWARDING') : route('bitaps.payments-forwarding.callback');
+
         return new AddressState(
-            (string)$response->callback_link,
+            (string)$callbackLink,
             (int)$response->pending_received,
             (int)$response->fee_paid,
             (int)$response->create_date,
@@ -81,7 +84,6 @@ class PaymentForwarding extends BitapsBase implements IPaymentForwarding
             (string)$response->forwarding_address,
             (int)$response->confirmations,
             (string)$response->address,
-            (string)$response->legacy_address,
             (string)$response->type,
             (int)$response->transaction_count,
             (int)$response->pending_paid,
