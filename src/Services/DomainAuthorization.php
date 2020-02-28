@@ -80,7 +80,9 @@ class Domain extends BitapsBase implements IDomainAuthorization
      */
     public function createDomainAccessToken(): string
     {
-        $domain = $this->createDomainAuthorizationCode(route('bitaps.payments-forwarding.callback'));
+        //If you are using a local environment, add BITAPS_CALLBACKLINK_FORWARDING to your configuration
+        $callbackLink = env('APP_ENV') === 'local' ? env('BITAPS_CALLBACKLINK_FORWARDING') : route('bitaps.payments-forwarding.callback');
+        $domain = $this->createDomainAuthorizationCode($callbackLink);
 
         return \Cache::remember(self::DOMAIN_ACCESS_TOKEN_CACHE_KEY . $domain->domain_hash,
             $this->cacheAccessTokenMinutes, function () use ($domain) {

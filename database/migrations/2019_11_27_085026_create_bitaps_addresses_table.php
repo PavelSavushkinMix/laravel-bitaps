@@ -23,7 +23,6 @@ class CreateBitapsAddressesTable extends Migration
             $table->string('forwarding_address')->nullable()->default(null);
             $table->unsignedSmallInteger('confirmations');
             $table->string('address');
-            $table->string('legacy_address')->nullable()->default(null);
             $table->string('invoice');
             $table->timestamps();
 
