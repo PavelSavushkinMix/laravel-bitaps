@@ -3,7 +3,8 @@
 namespace PostMix\LaravelBitaps\Controllers;
 
 use Illuminate\Http\Request;
-use App\Services\BitapsTransaction;
+use PostMix\LaravelBitaps\Services\BitapsTransaction;
+use PostMix\LaravelBitaps\Models\Transaction;
 
 class PaymentsForwardingController extends Controller
 {
@@ -29,18 +30,19 @@ class PaymentsForwardingController extends Controller
      */
     public function postCallback(Request $request)
     {
-        $BitapsTransaction = new BitapsTransaction;
-        $BitapsTransaction->newTransaction($request->all());
+        $bitapsTransaction = new BitapsTransaction;
+        $bitapsTransaction->newTransaction(Transaction $transaction, $request->all());
 
         return $this::sendResponse($request->input('invoice'));
     }
 
 
     /**
+     * return invoice for confirmations Transaction
      * @param $invoice
-     * @return mixed
+     * @return string
      */
-    protected function sendResponse($invoice) {
+    protected function sendResponse($invoice):string {
         return response()->json(['invoice' => $invoice]);
     }
 }
