@@ -7,6 +7,7 @@ use PostMix\LaravelBitaps\Contracts\ICallbackLog;
 use PostMix\LaravelBitaps\Contracts\IDomainAuthorization;
 use PostMix\LaravelBitaps\Contracts\IPaymentForwarding;
 use PostMix\LaravelBitaps\Contracts\IWallet;
+use PostMix\LaravelBitaps\Contracts\ITransaction;
 use PostMix\LaravelBitaps\Services\CallbackLog;
 use PostMix\LaravelBitaps\Services\Domain;
 use PostMix\LaravelBitaps\Services\PaymentForwarding;
@@ -25,6 +26,7 @@ class LaravelBitapsServiceProvider extends ServiceProvider
         $this->app->bind(ICallbackLog::class, CallbackLog::class);
         $this->app->bind(IDomainAuthorization::class, Domain::class);
         $this->app->bind(IWallet::class, Wallet::class);
+        $this->app->bind(ITransaction::class, Transaction::class);
     }
 
     /**

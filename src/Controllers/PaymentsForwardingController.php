@@ -35,6 +35,11 @@ class PaymentsForwardingController extends Controller
         return $this::sendResponse($request->input('invoice'));
     }
 
+
+    /**
+     * @param $invoice
+     * @return mixed
+     */
     protected function sendResponse($invoice) {
         return response()->json(['invoice' => $invoice]);
     }

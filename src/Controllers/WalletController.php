@@ -2,6 +2,7 @@
 
 namespace PostMix\LaravelBitaps\Controllers;
 
+use App\Services\BitapsTransaction;
 use Illuminate\Http\Request;
 
 class WalletController extends Controller
@@ -23,18 +24,24 @@ class WalletController extends Controller
     }
 
     /**
-     * Process wallet's address callback requests
-     *
      * @param Request $request
-     *
-     * @return \Illuminate\Http\Response
-     * TODO it should process requests
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function postCallbackAddress(Request $request)
+    public function getData(Request $request)
     {
-        $invoice = $request->get('invoice');
 
-        echo $invoice;
-        return response()->noContent();
+        $BitapsTransaction = new BitapsTransaction;
+        $BitapsTransaction->newTransaction($request->all());
+
+        return $this::sendResponse($request->input('invoice'));
+    }
+
+
+    /**
+     * @param $invoice
+     * @return \Illuminate\Http\JsonResponse
+     */
+    protected function sendResponse($invoice) {
+        return response()->json(['invoice' => $invoice]);
     }
 }

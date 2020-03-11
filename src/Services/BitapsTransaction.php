@@ -1,35 +1,84 @@
 <?php
 
 
-namespace App\Services;
+namespace PostMix\LaravelBitaps\Services;
 
+use PostMix\LaravelBitaps\Contracts\ITransaction;
 use PostMix\LaravelBitaps\Models\Transaction;
 use \Carbon\Carbon;
+use Webpatser\Uuid\Uuid;
 
 
-class BitapsTransaction
+class BitapsTransaction implements ITransaction
 {
-    public function newTransaction($data)
+
+    /**
+     * @param Transaction $transaction
+     * @param $data
+     * @return Transaction|void
+     */
+    public function newTransaction(Transaction $transaction, $data):Transaction
     {
-        $date = Carbon::now(); //$date->getTimestamp()
+        $date = Carbon::now();
         $status = $data['confirmations'] < 3 ? 'pending' : 'confirmed';
 
+        if ($data['confirmations'] == 0) {
 
-        $transaction = new Transaction;
+            $transaction->address = $data['address'];
+            $transaction->miner_fee = $data['payout_miner_fee'] ? $data['payout_miner_fee'] : 0;
+            $transaction->tx_hash = $data['tx_hash'];
+            $transaction->service_fee = $data['payout_service_fee'] ? $data['payout_service_fee'] : 0;
+            $transaction->timestamp = $date->date;
+            $transaction->time = $date->date;
+            $transaction->status = $status;
+            $transaction->hash = $data['code'];
+            $transaction->amount = $data['amount'];
+            $transaction->tx_out = $data['tx_out'];
+            $transaction->notification = '';
+            $transaction->created_at = $date->getTimestamp();
+            $transaction->updated_at = $date->getTimestamp();
+            $transaction->save();
+        } elseif ($data['confirmations'] > 0) {
+            $transaction = Transaction::where('address', $data['address'])
+                ->where('tx_hash', $data['tx_hash'])
+                ->update([
+                    'status' => $status,
+                    'hash' => $data['code'],
+                ]);
 
-        $transaction->address = $data['address'];
-        $transaction->miner_fee = $data['payout_miner_fee'] ? $data['payout_miner_fee'] : 0;
-        $transaction->tx_hash = $data['tx_hash'];
-        $transaction->service_fee = $data['payout_service_fee'] ? $data['payout_service_fee'] : 0;
-        $transaction->timestamp = $date->date;
-        $transaction->time = $date->date;
-        $transaction->status = $status;
-        $transaction->hash = $data['code'];
-        $transaction->amount = $data['amount'];
-        $transaction->tx_out = $data['tx_out'];
-        $transaction->notification = '';
-        $transaction->created_at = $date->getTimestamp();
-        $transaction->updated_at = $date->getTimestamp();
-        $transaction->save();
+            if ($status === 'confirmed') {
+                $currency = $data['currency'] === 'tBTC' ? 'BTC' : $data['currency'];
+                $currencyId = $this->getCurrencyId($currency)->id;
+                $userId = $this->getUserByAdrress($data['address']);
+
+                $transaction->create([
+                    'to_user_id' => $userId,
+                    'currency_id' => $currencyId,
+                    'trx_id' => Uuid::generate(),
+                    'amount' => $data['amount'],
+                ]);
+            }
+        }
+    }
+
+    /**
+     * @param $currency
+     * @return mixed
+     * return current Currency
+     */
+    public function getCurrencyId($currency):int
+    {
+        return \App\Models\Currency::where('code', $currency)->first();
+    }
+
+    /**
+     * @param $address
+     * @return mixed
+     * return current User by Address
+     */
+    public function getUserByAdrress($address):string
+    {
+        $result = \PostMix\LaravelBitaps\Models\Address::where('address', $address)->first()->id;
+        return \App\Models\UserBitapsAddress::where('bitaps_address_id', $result)->first()->user_id;
     }
 }
