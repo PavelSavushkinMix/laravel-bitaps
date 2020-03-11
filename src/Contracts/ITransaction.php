@@ -9,10 +9,11 @@ use PostMix\LaravelBitaps\Models\Transaction;
 interface ITransaction
 {
     /**
+     * @param Transaction $transaction
      * @param $data
      * @return Transaction
      */
-    public function newTransaction(Transaction $transaction, $data);
+    public function newTransaction(Transaction $transaction, $data):Transaction;
 
     /**
      * @param $currency

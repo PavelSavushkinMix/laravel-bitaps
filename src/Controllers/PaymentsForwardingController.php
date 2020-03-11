@@ -5,9 +5,23 @@ namespace PostMix\LaravelBitaps\Controllers;
 use Illuminate\Http\Request;
 use PostMix\LaravelBitaps\Services\BitapsTransaction;
 use PostMix\LaravelBitaps\Models\Transaction;
+use PostMix\LaravelBitaps\Contracts\ITransaction;
 
 class PaymentsForwardingController extends Controller
 {
+    /**
+     * @var
+     */
+    private $service;
+
+    /**
+     * PaymentsForwardingController constructor.
+     */
+    public function __construct()
+    {
+        $this->service = app()->make(ITransaction::class);
+    }
+
     /**
      * Return hash from request
      *
@@ -25,13 +39,13 @@ class PaymentsForwardingController extends Controller
      *
      * @param Request $request
      *
-     * @return \Illuminate\Http\Response
+     * @return string
      * TODO it should process requests
      */
-    public function postCallback(Request $request)
+    public function postCallback(Transaction $transaction, Request $request)
     {
         $bitapsTransaction = new BitapsTransaction;
-        $bitapsTransaction->newTransaction(Transaction $transaction, $request->all());
+        $bitapsTransaction->newTransaction($transaction, $request->all());
 
         return $this::sendResponse($request->input('invoice'));
     }
