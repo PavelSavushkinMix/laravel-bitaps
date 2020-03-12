@@ -13,12 +13,12 @@ class BitapsTransaction implements ITransaction
     /**
      * @param Transaction $transaction
      * @param $data
-     * @return Transaction
+     * @return Transaction|void
      */
-    public function newTransaction(Transaction $transaction, $data):Transaction
+    public function makeTransaction(Transaction $transaction, $data): Transaction
     {
         $date = Carbon::now();
-        $status = $data['confirmations'] < 3 ? 'pending' : 'confirmed';
+        $status = $data['confirmations'] < env('BITAPS_CONFIRMATIONS_TX') ? 'pending' : 'confirmed';
 
         if ($data['confirmations'] == 0) {
 
@@ -47,7 +47,7 @@ class BitapsTransaction implements ITransaction
             if ($status === 'confirmed') {
                 $currency = $data['currency'] === 'tBTC' ? 'BTC' : $data['currency'];
                 $currencyId = $this->getCurrencyId($currency)->id;
-                $userId = $this->getUserByAdrress($data['address']);
+                $userId = $this->getUserByAddress($data['address']);
 
                 $transaction->create([
                     'to_user_id' => $userId,
@@ -57,14 +57,16 @@ class BitapsTransaction implements ITransaction
                 ]);
             }
         }
+
+        return $transaction;
     }
 
     /**
      * @param $currency
      * @return mixed
-     * return current Currency
+     * return current Currency Id
      */
-    public function getCurrencyId($currency):int
+    public function getCurrencyId($currency): int
     {
         return \App\Models\Currency::where('code', $currency)->first();
     }
@@ -72,9 +74,9 @@ class BitapsTransaction implements ITransaction
     /**
      * @param $address
      * @return mixed
-     * return current User by Address
+     * return current User Id by Address
      */
-    public function getUserByAdrress($address):string
+    public function getUserByAddress($address): string
     {
         $result = \PostMix\LaravelBitaps\Models\Address::where('address', $address)->first()->id;
         return \App\Models\UserBitapsAddress::where('bitaps_address_id', $result)->first()->user_id;

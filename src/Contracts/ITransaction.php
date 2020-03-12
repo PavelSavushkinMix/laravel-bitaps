@@ -12,7 +12,7 @@ interface ITransaction
      * @param $data
      * @return Transaction
      */
-    public function makeTransaction(Transaction $transaction, $data);
+    public function makeTransaction(Transaction $transaction, $data): Transaction;
 
     /**
      * @param $currency
@@ -24,5 +24,5 @@ interface ITransaction
      * @param $address
      * @return string
      */
-    public function getUserByAddrress($address): string;
+    public function getUserByAddress($address): string;
 }

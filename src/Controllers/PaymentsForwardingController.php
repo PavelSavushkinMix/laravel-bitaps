@@ -43,7 +43,7 @@ class PaymentsForwardingController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function postCallback(TransactionModel $transaction, Request $request)
+    public function postCallback(TransactionModel $transaction, Request $request): TransactionModel
     {
         $bitapsTransaction = $this->service->makeTransaction($transaction, $request->all());
         return $this->sendResponse($request->input('invoice'));
