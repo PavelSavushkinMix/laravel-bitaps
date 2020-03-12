@@ -2,20 +2,24 @@
 
 namespace PostMix\LaravelBitaps\Controllers;
 
-use Illuminate\Http\Request;
-use PostMix\LaravelBitaps\Services\BitapsTransaction;
-use PostMix\LaravelBitaps\Models\Transaction;
 use PostMix\LaravelBitaps\Contracts\ITransaction;
+use Illuminate\Http\Request;
+use PostMix\LaravelBitaps\Models\Transaction as TransactionModel;
 
+/**
+ * Class PaymentsForwardingController
+ * @package PostMix\LaravelBitaps\Controllers
+ */
 class PaymentsForwardingController extends Controller
 {
     /**
-     * @var
+     * @var ITransaction
      */
     private $service;
 
     /**
      * PaymentsForwardingController constructor.
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function __construct()
     {
@@ -35,28 +39,21 @@ class PaymentsForwardingController extends Controller
     }
 
     /**
-     * Process callback requests
-     *
+     * @param TransactionModel $transaction
      * @param Request $request
-     *
-     * @return string
-     * TODO it should process requests
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function postCallback(Transaction $transaction, Request $request)
+    public function postCallback(TransactionModel $transaction, Request $request)
     {
-        $bitapsTransaction = new BitapsTransaction;
-        $bitapsTransaction->newTransaction($transaction, $request->all());
-
-        return $this::sendResponse($request->input('invoice'));
+        $bitapsTransaction = $this->service->makeTransaction($transaction, $request->all());
+        return $this->sendResponse($request->input('invoice'));
     }
 
-
     /**
-     * return invoice for confirmations Transaction
      * @param $invoice
-     * @return string
+     * @return \Illuminate\Http\JsonResponse
      */
-    protected function sendResponse($invoice):string {
+    protected function sendResponse($invoice) {
         return response()->json(['invoice' => $invoice]);
     }
 }

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace PostMix\LaravelBitaps\Services;
 
 use PostMix\LaravelBitaps\Contracts\ITransaction;
@@ -8,14 +7,13 @@ use PostMix\LaravelBitaps\Models\Transaction;
 use \Carbon\Carbon;
 use Webpatser\Uuid\Uuid;
 
-
 class BitapsTransaction implements ITransaction
 {
 
     /**
      * @param Transaction $transaction
      * @param $data
-     * @return Transaction|void
+     * @return Transaction
      */
     public function newTransaction(Transaction $transaction, $data):Transaction
     {
