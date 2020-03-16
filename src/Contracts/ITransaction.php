@@ -15,14 +15,20 @@ interface ITransaction
     public function makeTransaction(Transaction $transaction, $data): Transaction;
 
     /**
-     * @param $currency
+     * @param $address
      * @return int
      */
-    public function getCurrencyId($currency): int;
+    public function getAddressIdByAddress($address): int;
+
+    /**
+     * @param $txHash
+     * @return string
+     */
+    public function getAddressByTxHash($txHash): string;
 
     /**
      * @param $address
-     * @return string
+     * @return array
      */
-    public function getUserByAddress($address): string;
+    public function getDataByAddress($address): array;
 }
