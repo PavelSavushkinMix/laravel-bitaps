@@ -75,7 +75,7 @@ class PaymentForwarding extends BitapsBase implements IPaymentForwarding
             (string)$callbackLink,
             (int)$response->pending_received,
             (int)$response->fee_paid,
-            (int)$response->create_date,
+            (string)$response->create_date,
             (int)$response->invalid_transaction_count,
             (int)$response->paid,
             (int)$response->received,
