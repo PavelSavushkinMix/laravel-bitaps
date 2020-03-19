@@ -2,7 +2,6 @@
 
 namespace PostMix\LaravelBitaps\Traits;
 
-use PostMix\LaravelBitaps\Models\Address;
 use PostMix\LaravelBitaps\Models\Currency;
 
 trait BitapsHelpers
@@ -18,7 +17,10 @@ trait BitapsHelpers
     protected function checkCryptocurrency(string $cryptocurrencyCode)
     {
         if (Currency::code($cryptocurrencyCode)->count() === 0) {
-            throw new \Exception($cryptocurrencyCode . ' is not supported');
+            throw new \Exception(trans('bitaps::validation.cryptocurrency_is_not_supported',
+                [
+                    'cryptocurrency' => $cryptocurrencyCode,
+                ]));
         }
     }
 
