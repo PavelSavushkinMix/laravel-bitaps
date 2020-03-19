@@ -40,4 +40,25 @@ class Transaction extends Model
     {
         return $this->hasMany(TransactionOut::class);
     }
+
+    /**
+     * Address of the current transaction
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function address()
+    {
+        return $this->hasOne(Address::class, 'address', 'address');
+    }
+
+    /**
+     * Currency of the transaction
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOneThrough
+     */
+    public function currency()
+    {
+        return $this->hasOneThrough(Currency::class, Address::class, 'address',
+            'id', 'address', 'currency_id');
+    }
 }
