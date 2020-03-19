@@ -31,8 +31,9 @@ class PaymentForwarding extends BitapsBase implements IPaymentForwarding
             'forwarding_address' => $forwardingAddress,
             'confirmations' => $confirmations,
         ];
-        $this->fillQuery($params, 'callback_link',
-            config('bitaps.payment_forwarding_callback_link'));
+        $callbackLink = config('bitaps.payment_forwarding_callback_link', null)
+            ?? route('bitaps.payments-forwarding.callback');
+        $this->fillQuery($params, 'callback_link', $callbackLink);
 
         $responseBody = $this->client->post('create/payment/address', [
             'json' => $params,
@@ -69,8 +70,8 @@ class PaymentForwarding extends BitapsBase implements IPaymentForwarding
             ->getBody();
         $response = json_decode($responseBody->getContents());
 
-        //If you are using a local environment, add BITAPS_CALLBACKLINK_FORWARDING to your configuration
-        $callbackLink = env('APP_ENV') === 'local' ? env('BITAPS_CALLBACKLINK_FORWARDING') : route('bitaps.payments-forwarding.callback');
+        $callbackLink = config('bitaps.payment_forwarding_callback_link', null)
+            ?? route('bitaps.payments-forwarding.callback');
 
         return new AddressState(
             (string)$callbackLink,
