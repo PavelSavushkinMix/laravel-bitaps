@@ -81,7 +81,9 @@ class Domain extends BitapsBase implements IDomainAuthorization
     public function createDomainAccessToken(): string
     {
         // TODO do we really want to use wallet's callback url?
-        $domain = $this->createDomainAuthorizationCode(config('bitaps.custom_wallet_callback_link'));
+        $callbackLink = config('bitaps.wallet_callback_link', null)
+            ?? route('bitaps.wallet.callback');
+        $domain = $this->createDomainAuthorizationCode($callbackLink);
 
         return \Cache::remember(self::DOMAIN_ACCESS_TOKEN_CACHE_KEY . $domain->domain_hash,
             $this->cacheAccessTokenMinutes, function () use ($domain) {
