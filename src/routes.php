@@ -24,6 +24,9 @@ Route::group([
             'as' => 'wallet.',
             'prefix' => 'wallet',
         ], function () {
+            Route::get('callback', [
+                'uses' => 'PaymentsCallbackController@getCallback',
+            ]);
             Route::post('callback', [
                 'as' => 'callback',
                 'uses' => 'PaymentsCallbackController@getCallback',
