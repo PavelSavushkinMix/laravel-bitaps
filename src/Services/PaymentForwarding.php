@@ -27,13 +27,12 @@ class PaymentForwarding extends BitapsBase implements IPaymentForwarding
         string $forwardingAddress,
         int $confirmations = 3
     ): Address {
-        //If you are using a local environment, add BITAPS_CALLBACKLINK_USER to your configuration
-        $callbackLink = env('APP_ENV') === 'local' ? env('BITAPS_CALLBACKLINK_USER') : route('bitaps.wallet.callback');
         $params = [
             'forwarding_address' => $forwardingAddress,
             'confirmations' => $confirmations,
         ];
-        $this->fillQuery($params, 'callback_link', $callbackLink);
+        $this->fillQuery($params, 'callback_link',
+            config('bitaps.payment_forwarding_callback_link'));
 
         $responseBody = $this->client->post('create/payment/address', [
             'json' => $params,

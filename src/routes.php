@@ -13,11 +13,11 @@ Route::group([
             'prefix' => 'payments-forwarding',
         ], function () {
             Route::get('callback', [
-                'uses' => 'PaymentsForwardingController@getCallback',
+                'uses' => 'PaymentsCallbackController@getCallback',
             ]);
             Route::post('callback', [
                 'as' => 'callback',
-                'uses' => 'PaymentsForwardingController@postCallback',
+                'uses' => 'PaymentsCallbackController@postCallback',
             ]);
         });
         Route::group([
@@ -26,11 +26,11 @@ Route::group([
         ], function () {
             Route::post('callback', [
                 'as' => 'callback',
-                'uses' => 'WalletController@postCallbackWallet',
+                'uses' => 'PaymentsCallbackController@getCallback',
             ]);
             Route::post('callback-address', [
                 'as' => 'callback-address',
-                'uses' => 'WalletController@postCallbackAddress',
+                'uses' => 'PaymentsCallbackController@postCallback',
             ]);
         });
     });
