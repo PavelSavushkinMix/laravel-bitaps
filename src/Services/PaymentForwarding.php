@@ -46,10 +46,8 @@ class PaymentForwarding extends BitapsBase implements IPaymentForwarding
             'payment_code' => (string)$response->payment_code,
             'callback_link' => (string)$response->callback_link,
             'forwarding_address' => (string)$response->forwarding_address,
-            'domain_hash' => (string)$response->domain_hash,
             'confirmations' => $confirmations,
             'address' => (string)$response->address,
-            'domain' => (string)$response->domain,
             'invoice' => (string)$response->invoice,
         ]);
     }
