@@ -2,14 +2,23 @@
 
 namespace PostMix\LaravelBitaps\Events;
 
+use PostMix\LaravelBitaps\Models\Transaction;
 
 class TransactionConfirmed
 {
-    public $data;
-    
-    public function __construct($data)
+    /**
+     * @var Transaction
+     */
+    public $transaction;
+
+    /**
+     * TransactionConfirmed constructor.
+     *
+     * @param Transaction $transaction
+     */
+    public function __construct(Transaction $transaction)
     {
-        $this->data = $data;
-    }  
-    
+        $this->transaction = $transaction;
+    }
+
 }

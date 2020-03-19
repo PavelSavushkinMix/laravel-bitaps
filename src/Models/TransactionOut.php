@@ -33,4 +33,14 @@ class TransactionOut extends Model
     {
         return $this->belongsTo(Transaction::class);
     }
+
+    /**
+     * Address model by address value
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function wallet_address()
+    {
+        return $this->hasOne(Address::class, 'address', 'address');
+    }
 }

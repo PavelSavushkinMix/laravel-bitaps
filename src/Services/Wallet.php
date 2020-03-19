@@ -28,8 +28,7 @@ class Wallet extends BitapsBase implements IWallet
      */
     public function create(string $password): WalletModel
     {
-        //If you are using a local environment, add BITAPS_CALLBACKLINK_USER to your configuration
-        $callbackLink = env('APP_ENV') === 'local' ? env('BITAPS_CALLBACKLINK_USER') : route('bitaps.wallet.callback');
+        $callbackLink = config('bitaps.wallet_callback_link');
         $params = [
             'password' => $password,
         ];
@@ -62,7 +61,7 @@ class Wallet extends BitapsBase implements IWallet
         WalletModel $wallet,
         int $confirmations = 3
     ): Address {
-        $callbackLink = route('bitaps.wallet.callback-address');
+        $callbackLink = config('bitaps.wallet_address_callback_link');
 
         $params = [
             'wallet_id' => $wallet->wallet_id,
