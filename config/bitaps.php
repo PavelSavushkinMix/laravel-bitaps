@@ -30,17 +30,16 @@ return [
      * Payment forwarding callback link
      */
     'payment_forwarding_callback_link' => env('BITAPS_PAYMENT_FORWARDING_CALLBACK_LINK',
-        route('bitaps.payments-forwarding.callback')),
+        null),
 
     /**
      * Wallet callback link
      */
-    'wallet_callback_link' => env('BITAPS_WALLET_CALLBACK_LINK',
-        route('bitaps.wallet.callback')),
+    'wallet_callback_link' => env('BITAPS_WALLET_CALLBACK_LINK', null),
 
     /**
      * Wallet callback link
      */
     'wallet_address_callback_link' => env('BITAPS_WALLET_ADDRESS_CALLBACK_LINK',
-        route('bitaps.wallet.callback-address')),
+        null),
 ];
