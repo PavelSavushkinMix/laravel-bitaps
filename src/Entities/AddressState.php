@@ -30,7 +30,7 @@ class AddressState
     /**
      * Address date of creation
      *
-     * @var int
+     * @var string
      */
     private $createDate;
 
@@ -75,13 +75,6 @@ class AddressState
      * @var string
      */
     private $address;
-
-    /**
-     * Payment address in outdated format
-     *
-     * @var string
-     */
-    private $legacyAddress;
 
     /**
      * Type of payment address
@@ -131,14 +124,13 @@ class AddressState
      * @param string $callbackLink
      * @param int $pendingReceived
      * @param int $feePaid
-     * @param int $createDate
+     * @param string $createDate
      * @param int $invalidTransactionCount
      * @param int $paid
      * @param int $received
      * @param string $forwardingAddress
      * @param int $confirmations
      * @param string $address
-     * @param string $legacyAddress
      * @param string $type
      * @param int $transactionCount
      * @param int $pendingPaid
@@ -150,14 +142,13 @@ class AddressState
         string $callbackLink,
         int $pendingReceived,
         int $feePaid,
-        int $createDate,
+        string $createDate,
         int $invalidTransactionCount,
         int $paid,
         int $received,
         string $forwardingAddress,
         int $confirmations,
         string $address,
-        string $legacyAddress,
         string $type,
         int $transactionCount,
         int $pendingPaid,
@@ -175,7 +166,6 @@ class AddressState
         $this->setForwardingAddress($forwardingAddress);
         $this->setConfirmations($confirmations);
         $this->setAddress($address);
-        $this->setLegacyAddress($legacyAddress);
         $this->setType($type);
         $this->setTransactionCount($transactionCount);
         $this->setPendingPaid($pendingPaid);
@@ -233,17 +223,17 @@ class AddressState
     }
 
     /**
-     * @return int
+     * @return string
      */
-    public function getCreateDate(): int
+    public function getCreateDate(): string
     {
         return $this->createDate;
     }
 
     /**
-     * @param int $value
+     * @param string $value
      */
-    public function setCreateDate(int $value)
+    public function setCreateDate(string $value)
     {
         $this->createDate = $value;
     }
@@ -305,9 +295,9 @@ class AddressState
     }
 
     /**
-     * @param int $value
+     * @param string $value
      */
-    public function setForwardingAddress(int $value)
+    public function setForwardingAddress(string $value)
     {
         $this->forwardingAddress = $value;
     }
@@ -342,22 +332,6 @@ class AddressState
     public function setAddress(string $value)
     {
         $this->address = $value;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLegacyAddress(): string
-    {
-        return $this->legacyAddress;
-    }
-
-    /**
-     * @param string $value
-     */
-    public function setLegacyAddress(string $value)
-    {
-        $this->legacyAddress = $value;
     }
 
     /**
