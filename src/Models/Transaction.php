@@ -16,6 +16,7 @@ class Transaction extends Model
      */
     protected $fillable = [
         'id',
+        'address',
         'miner_fee',
         'tx_hash',
         'service_fee',

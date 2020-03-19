@@ -15,6 +15,7 @@ class CreateBitapsTransactionsTable extends Migration
     {
         Schema::create('bitaps_transactions', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('address');
             $table->unsignedInteger('miner_fee');
             $table->string('tx_hash');
             $table->unsignedInteger('service_fee');
