@@ -4,7 +4,7 @@ namespace PostMix\LaravelBitaps\Events;
 
 use PostMix\LaravelBitaps\Models\Transaction;
 
-class TransactionConfirmed
+class PendingTransaction
 {
     /**
      * @var Transaction
