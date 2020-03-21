@@ -20,6 +20,7 @@ class TransactionOut extends Model
         'amount',
         'tx_out',
         'address',
+        'payout_tx_hash',
         'created_at',
         'updated_at',
     ];
