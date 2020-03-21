@@ -13,27 +13,41 @@ Route::group([
             'prefix' => 'payments-forwarding',
         ], function () {
             Route::get('callback', [
-                'uses' => 'PaymentsCallbackController@getCallback',
+                'uses' => 'PaymentsForwardingCallbackController@getCallback',
             ]);
             Route::post('callback', [
                 'as' => 'callback',
-                'uses' => 'PaymentsCallbackController@postCallback',
+                'uses' => 'PaymentsForwardingCallbackController@postCallback',
             ]);
         });
+
         Route::group([
             'as' => 'wallet.',
             'prefix' => 'wallet',
         ], function () {
             Route::get('callback', [
-                'uses' => 'PaymentsCallbackController@getCallback',
+                'uses' => 'WalletCallbackController@getCallback',
             ]);
             Route::post('callback', [
                 'as' => 'callback',
-                'uses' => 'PaymentsCallbackController@getCallback',
+                'uses' => 'WalletCallbackController@getCallback',
             ]);
             Route::post('callback-address', [
                 'as' => 'callback-address',
-                'uses' => 'PaymentsCallbackController@postCallback',
+                'uses' => 'WalletCallbackController@postCallback',
+            ]);
+        });
+
+        Route::group([
+            'as' => 'domain.',
+            'prefix' => 'domain',
+        ], function () {
+            Route::get('callback', [
+                'as' => 'callback',
+                'uses' => 'DomainCallbackController@callback',
+            ]);
+            Route::post('callback', [
+                'uses' => 'DomainCallbackController@callback',
             ]);
         });
     });
