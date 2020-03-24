@@ -19,9 +19,10 @@ class CreateBitapsTransactionOutsTable extends Migration
             $table->unsignedInteger('amount');
             $table->string('tx_out');
             $table->string('address');
-            $table->string('payout_tx_hash')->unique();
+            $table->string('payout_tx_hash');
             $table->timestamps();
 
+            $table->unique(['payout_tx_hash', 'address']);
             $table->foreign('transaction_id')
                 ->references('id')
                 ->on('bitaps_transactions');
