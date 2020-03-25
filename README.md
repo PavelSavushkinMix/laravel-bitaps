@@ -38,10 +38,11 @@ You are able to make implementations using **app()->make()** method. You can che
 Available implementations:
 
 ```php
-app()->make(PostMix\LaravelBitaps\Contracts\IPaymentForwarding::class);
+// Default currency: btc. Supported: btc, tbtc, ltc, bch, eth.
+
+app()->make(PostMix\LaravelBitaps\Contracts\IPaymentForwarding::class, ['currency' => 'btc']);
 app()->make(PostMix\LaravelBitaps\Contracts\ICallbackLog::class);
 app()->make(PostMix\LaravelBitaps\Contracts\IDomainAuthorization::class);
-// Default currency: btc. Supported: btc, tbtc, ltc, bch, eth.
 app()->make(PostMix\LaravelBitaps\Contracts\IWallet::class, ['currency' => 'btc']);
 
 

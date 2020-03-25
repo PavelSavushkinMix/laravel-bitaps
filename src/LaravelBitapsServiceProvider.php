@@ -21,16 +21,13 @@ class LaravelBitapsServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(IPaymentForwarding::class, PaymentForwarding::class);
+        $this->app->bind(IPaymentForwarding::class, function ($app, $params) {
+            return new PaymentForwarding($this->parseProvidedCurrency($params['currency']));
+        });
         $this->app->bind(ICallbackLog::class, CallbackLog::class);
         $this->app->bind(IDomainAuthorization::class, Domain::class);
         $this->app->bind(IWallet::class, function ($app, $params) {
-            $currency = $params['currency'] ?? 'btc';
-            if (config('bitaps.debug') && $currency === 'btc') {
-                $currency = 'tbtc';
-            }
-
-            return new Wallet($currency);
+            return new Wallet($this->parseProvidedCurrency($params['currency']));
         });
     }
 
@@ -48,5 +45,22 @@ class LaravelBitapsServiceProvider extends ServiceProvider
             __DIR__ . '/../config/bitaps.php' => config_path('bitaps.php'),
             __DIR__ . '/../lang/' => resource_path('lang/vendor/bitaps'),
         ]);
+    }
+
+    /**
+     * Parse provided currency
+     *
+     * @param string|null $currency
+     *
+     * @return string
+     */
+    private function parseProvidedCurrency(string $currency = null): string
+    {
+        $currency = $currency ?? 'btc';
+        if (config('bitaps.debug') && $currency === 'btc') {
+            $currency = 'tbtc';
+        }
+
+        return $currency;
     }
 }
