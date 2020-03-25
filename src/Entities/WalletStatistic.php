@@ -203,9 +203,9 @@ class WalletStatistic
     }
 
     /**
-     * @param string $value
+     * @param int $value
      */
-    public function setBalanceAmount(string $value)
+    public function setBalanceAmount(int $value)
     {
         $this->balanceAmount = $value;
     }
@@ -219,9 +219,9 @@ class WalletStatistic
     }
 
     /**
-     * @param int $value
+     * @param string $value
      */
-    public function setDate(int $value)
+    public function setDate(string $value)
     {
         $this->date = $value;
     }

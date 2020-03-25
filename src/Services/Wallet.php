@@ -141,7 +141,7 @@ class Wallet extends BitapsBase implements IWallet
         $headers = $this->getWalletAccessHeaders($wallet, []);
         $query = [];
 
-        $responseBody = $this->client->post('wallet/state/' . $wallet->wallet_id,
+        $responseBody = $this->client->get('wallet/state/' . $wallet->wallet_hash,
             [
                 'headers' => $headers,
                 'query' => $query,
@@ -194,7 +194,7 @@ class Wallet extends BitapsBase implements IWallet
         $this->fillQuery($query, 'limit', $limit);
         $this->fillQuery($query, 'page', $page);
 
-        $responseBody = $this->client->post('wallet/transactions/' . $wallet->wallet_id,
+        $responseBody = $this->client->get('wallet/transactions/' . $wallet->wallet_hash,
             [
                 'headers' => $headers,
                 'query' => $query,
@@ -255,7 +255,7 @@ class Wallet extends BitapsBase implements IWallet
         $this->fillQuery($query, 'limit', $limit);
         $this->fillQuery($query, 'page', $page);
 
-        $responseBody = $this->client->post('wallet/addresses/' . $wallet->wallet_id,
+        $responseBody = $this->client->get('wallet/addresses/' . $wallet->wallet_hash,
             [
                 'headers' => $headers,
                 'query' => $query,
@@ -306,7 +306,7 @@ class Wallet extends BitapsBase implements IWallet
         $this->fillQuery($query, 'limit', $limit);
         $this->fillQuery($query, 'page', $page);
 
-        $responseBody = $this->client->post('wallet/address/transactions/' . $wallet->wallet_id . '/' . $address->address,
+        $responseBody = $this->client->get('wallet/address/transactions/' . $wallet->wallet_hash . '/' . $address->address,
             [
                 'headers' => $headers,
                 'query' => $query,
@@ -367,7 +367,7 @@ class Wallet extends BitapsBase implements IWallet
         $this->fillQuery($query, 'limit', $limit);
         $this->fillQuery($query, 'page', $page);
 
-        $responseBody = $this->client->post('wallet/daily/statistic/' . $wallet->wallet_id,
+        $responseBody = $this->client->get('wallet/daily/statistic/' . $wallet->wallet_hash,
             [
                 'headers' => $headers,
                 'query' => $query,
