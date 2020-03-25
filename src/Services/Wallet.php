@@ -10,6 +10,7 @@ use PostMix\LaravelBitaps\Entities\WalletState;
 use PostMix\LaravelBitaps\Entities\WalletStatistic;
 use PostMix\LaravelBitaps\Entities\WalletTransaction;
 use PostMix\LaravelBitaps\Models\Address;
+use PostMix\LaravelBitaps\Models\Currency;
 use PostMix\LaravelBitaps\Models\Wallet as WalletModel;
 use PostMix\LaravelBitaps\Traits\BitapsHelpers;
 use PostMix\LaravelBitaps\Traits\WalletHelpers;
@@ -400,5 +401,13 @@ class Wallet extends BitapsBase implements IWallet
         }
 
         return $result;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getCurrentCurrency(): Currency
+    {
+        return $this->getCurrency();
     }
 }

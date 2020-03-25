@@ -5,6 +5,7 @@ namespace PostMix\LaravelBitaps\Contracts;
 use Illuminate\Support\Collection;
 use PostMix\LaravelBitaps\Entities\WalletState;
 use PostMix\LaravelBitaps\Models\Address;
+use PostMix\LaravelBitaps\Models\Currency;
 use PostMix\LaravelBitaps\Models\Wallet;
 
 interface IWallet
@@ -133,4 +134,11 @@ interface IWallet
         int $limit = null,
         int $page = null
     ): Collection;
+
+    /**
+     * Get current cryptocurrency
+     *
+     * @return Currency
+     */
+    public function getCurrentCurrency(): Currency;
 }
