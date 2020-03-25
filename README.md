@@ -41,7 +41,9 @@ Available implementations:
 app()->make(PostMix\LaravelBitaps\Contracts\IPaymentForwarding::class);
 app()->make(PostMix\LaravelBitaps\Contracts\ICallbackLog::class);
 app()->make(PostMix\LaravelBitaps\Contracts\IDomainAuthorization::class);
-app()->make(PostMix\LaravelBitaps\Contracts\IWallet::class);
+// Default currency: btc. Supported: btc, tbtc, ltc, bch, eth.
+app()->make(PostMix\LaravelBitaps\Contracts\IWallet::class, ['currency' => 'btc']);
+
 
 // WIP
 app()->make(PostMix\LaravelBitaps\Contracts\IDomainStatistic::class);
