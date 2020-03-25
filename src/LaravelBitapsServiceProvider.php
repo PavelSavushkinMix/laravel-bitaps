@@ -24,7 +24,14 @@ class LaravelBitapsServiceProvider extends ServiceProvider
         $this->app->bind(IPaymentForwarding::class, PaymentForwarding::class);
         $this->app->bind(ICallbackLog::class, CallbackLog::class);
         $this->app->bind(IDomainAuthorization::class, Domain::class);
-        $this->app->bind(IWallet::class, Wallet::class);
+        $this->app->bind(IWallet::class, function ($app, $params) {
+            $currency = $params['currency'] ?? 'btc';
+            if (config('bitaps.debug') && $currency === 'btc') {
+                $currency = 'tbtc';
+            }
+
+            return new Wallet($currency);
+        });
     }
 
     /**

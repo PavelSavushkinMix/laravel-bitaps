@@ -56,4 +56,14 @@ class Wallet extends Model
     {
         return $this->hasMany(Address::class);
     }
+
+    /**
+     * Currency of the current wallet
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function currency()
+    {
+        return $this->belongsTo(Currency::class);
+    }
 }

@@ -43,6 +43,11 @@ class CreateBitapsCurrenciesTable extends Migration
                 'code' => 'eth',
                 'service_fee' => 0.002,
             ],
+            [
+                'name' => 'Bitcoin Testnet',
+                'code' => 'tbtc',
+                'service_fee' => 0,
+            ],
         ]);
     }
 
