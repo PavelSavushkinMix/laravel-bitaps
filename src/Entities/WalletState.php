@@ -322,15 +322,15 @@ class WalletState
     /**
      * @return string
      */
-    public function getCreateDate(): int
+    public function getCreateDate(): string
     {
         return $this->createDate;
     }
 
     /**
-     * @param int $value
+     * @param string $value
      */
-    public function setCreateDate(int $value)
+    public function setCreateDate(string $value)
     {
         $this->createDate = $value;
     }

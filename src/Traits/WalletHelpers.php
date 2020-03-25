@@ -18,8 +18,8 @@ trait WalletHelpers
         Wallet $wallet,
         array $params
     ): array {
-        $params = json_encode($params);
-        $nonce = round(microtime(true) * 1000);
+        $params = count($params) > 0 ? json_encode($params) : '';
+        $nonce = round(microtime(true) * 10000);
         $key = hash('sha256',
             (hash('sha256', $wallet->wallet_id . $wallet->password, true)),
             true);
