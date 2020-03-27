@@ -56,11 +56,6 @@ class LaravelBitapsServiceProvider extends ServiceProvider
      */
     private function parseProvidedCurrency(string $currency = null): string
     {
-        $currency = $currency ?? 'btc';
-        if (config('bitaps.debug') && $currency === 'btc') {
-            $currency = 'tbtc';
-        }
-
         return $currency;
     }
 }
