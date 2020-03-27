@@ -36,12 +36,17 @@ class BitapsBase
         $this->checkCryptocurrency($cryptoCurrency);
         $this->currency = Currency::where('code', $cryptoCurrency)->first();
 
-        if ($cryptoCurrency === 'tbtc') {
-            $cryptoCurrency = 'btc';
+        $url = self::BASE_URL;
+        switch ($cryptoCurrency) {
+            default:
+            case 'btc':
+                $url .= 'btc';
+                break;
+            case 'tbtc':
+                $url .= 'btc/testnet';
+                break;
         }
-        $debugUrl = config('bitaps.debug') ? '/testnet' : '';
-
-        $url = self::BASE_URL . $cryptoCurrency . $debugUrl . '/v1/';
+        $url .= '/v1/';
 
         $this->client = new \GuzzleHttp\Client([
             'base_uri' => $url,
