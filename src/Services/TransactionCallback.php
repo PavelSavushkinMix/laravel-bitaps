@@ -17,22 +17,50 @@ class TransactionCallback
      * Unconfirmed transaction event key
      */
     const TRANSACTION_UNCONFIRMED_EVENT = 'unconfirmed';
+
     /**
      * Pending transaction event key
      */
     const TRANSACTION_PENDING_EVENT = 'pending';
+
     /**
      * Confirmed transaction event key
      */
     const TRANSACTION_CONFIRMED_EVENT = 'confirmed';
+
     /**
      * Payout sent transaction event key
      */
     const TRANSACTION_PAYOUT_SENT_EVENT = 'payout sent';
+
     /**
      * Payout confirmed transaction event key
      */
     const TRANSACTION_PAYOUT_CONFIRMED_EVENT = 'payout confirmed';
+
+    /**
+     * Create a transaction based on request's data
+     *
+     * @param Request $request
+     *
+     * @return Transaction
+     */
+    private function makeTransaction(Request $request): Transaction
+    {
+        return Transaction::create([
+            'address' => $request->get('address'),
+            'miner_fee' => $request->get('payout_miner_fee') ?? 0,
+            'tx_hash' => $request->get('tx_hash'),
+            'service_fee' => $request->get('payout_service_fee') ?? 0,
+            'timestamp' => date('Y-m-d'),
+            'time' => date('H:i:s'),
+            'status' => $request->get('event'),
+            'hash' => $request->get('code'),
+            'amount' => $request->get('amount'),
+            'tx_out' => $request->get('tx_out'),
+            'notification' => '',
+        ]);
+    }
 
     /**
      * Handle callback for payment
@@ -48,22 +76,13 @@ class TransactionCallback
         if (strpos($event, self::TRANSACTION_PENDING_EVENT) !== false) {
             $event = self::TRANSACTION_PENDING_EVENT;
         }
+        if (config('bitaps.debug')) {
+            \Log::channel('stack')->debug('Income transaction: ' . json_encode($request->all()));
+        }
 
         switch ($event) {
             case self::TRANSACTION_UNCONFIRMED_EVENT:
-                $trx = Transaction::create([
-                    'address' => $request->get('address'),
-                    'miner_fee' => $request->get('payout_miner_fee') ?? 0,
-                    'tx_hash' => $request->get('tx_hash'),
-                    'service_fee' => $request->get('payout_service_fee') ?? 0,
-                    'timestamp' => date('Y-m-d'),
-                    'time' => date('H:i:s'),
-                    'status' => $request->get('event'),
-                    'hash' => $request->get('code'),
-                    'amount' => $request->get('amount'),
-                    'tx_out' => $request->get('tx_out'),
-                    'notification' => '',
-                ]);
+                $trx = $this->makeTransaction($request);
 
                 event(new UnconfirmedTransaction($trx));
                 break;
@@ -78,7 +97,7 @@ class TransactionCallback
                 event(new ConfirmedTransaction($trx));
                 break;
             case self::TRANSACTION_PAYOUT_SENT_EVENT:
-                $trx = $this->updateTransactionByRequest($request);
+                $trx = $this->makeTransaction($request);
 
                 event(new PayoutSentTransaction($trx));
                 break;
@@ -112,7 +131,7 @@ class TransactionCallback
     private function updateTransactionByRequest(Request $request): Transaction
     {
         /** @var Transaction $trx */
-        $trx = Transaction::where('tx_hash', $request->get('tx_hash'))
+        $trx = Transaction::where('hash', $request->get('code'))
             ->first();
         $trx->update([
             'status' => $request->get('event'),
