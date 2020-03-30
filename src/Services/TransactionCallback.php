@@ -131,11 +131,10 @@ class TransactionCallback
     private function updateTransactionByRequest(Request $request): Transaction
     {
         /** @var Transaction $trx */
-        $trx = Transaction::where('hash', $request->get('code'))
+        $trx = Transaction::where('tx_hash', $request->get('tx_hash'))
             ->first();
         $trx->update([
             'status' => $request->get('event'),
-            'hash' => $request->get('code'),
             'service_fee' => $request->get('payout_service_fee') ?? 0,
         ]);
 
