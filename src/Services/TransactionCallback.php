@@ -132,6 +132,7 @@ class TransactionCallback
     {
         /** @var Transaction $trx */
         $trx = Transaction::where('tx_hash', $request->get('tx_hash'))
+            ->where('address', $request->get('address'))
             ->first();
         $trx->update([
             'status' => $request->get('event'),
