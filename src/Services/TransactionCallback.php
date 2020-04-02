@@ -97,7 +97,7 @@ class TransactionCallback
                 event(new ConfirmedTransaction($trx));
                 break;
             case self::TRANSACTION_PAYOUT_SENT_EVENT:
-                $trx = $this->makeTransaction($request);
+                $trx = $this->updateTransactionByRequest($request);
 
                 event(new PayoutSentTransaction($trx));
                 break;
