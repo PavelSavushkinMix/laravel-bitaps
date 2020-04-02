@@ -103,12 +103,14 @@ class TransactionCallback
                 break;
             case self::TRANSACTION_PAYOUT_CONFIRMED_EVENT:
                 $trx = $this->updateTransactionByRequest($request);
-                $trx->outs()->create([
-                    'amount' => $request->get('amount'),
-                    'tx_out' => $request->get('tx_out'),
-                    'address' => $request->get('address'),
-                    'payout_tx_hash' => $request->get('payout_tx_hash'),
-                ]);
+                if (!is_null($trx)) {
+                    $trx->outs()->create([
+                        'amount' => $request->get('amount'),
+                        'tx_out' => $request->get('tx_out'),
+                        'address' => $request->get('address'),
+                        'payout_tx_hash' => $request->get('payout_tx_hash'),
+                    ]);
+                }
 
                 event(new PayoutConfirmedTransaction($trx));
                 break;
@@ -134,10 +136,12 @@ class TransactionCallback
         $trx = Transaction::where('tx_hash', $request->get('tx_hash'))
             ->where('address', $request->get('address'))
             ->first();
-        $trx->update([
-            'status' => $request->get('event'),
-            'service_fee' => $request->get('payout_service_fee') ?? 0,
-        ]);
+        if (!is_null($trx)) {
+            $trx->update([
+                'status' => $request->get('event'),
+                'service_fee' => $request->get('payout_service_fee') ?? 0,
+            ]);
+        }
 
         return $trx;
     }
